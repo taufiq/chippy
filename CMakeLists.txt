@@ -1,9 +1,19 @@
-cmake_minimum_required(VERSION 3.9.1)
-project(skippy)
-include_directories(/usr/local/include)
-include_directories(/opt/homebrew/opt/freetype2/include/freetype2)
-link_directories(/usr/local/lib)
-link_directories(/opt/homebrew/opt/freetype2/lib/)
-add_executable(chippy main.c)
-target_link_libraries(chippy sdl2)
-target_link_libraries(chippy freetype)
+cmake_minimum_required(VERSION 3.10)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+project(Chippy VERSION 1.0)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+set(SDLTTF_VENDORED ON)
+
+add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
+
+add_executable(chippy main.cpp)
+
+target_link_libraries(chippy PRIVATE SDL3_ttf::SDL3_ttf SDL3::SDL3)
+
+target_include_directories(chippy PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR}/SDL3.framework/Headers")

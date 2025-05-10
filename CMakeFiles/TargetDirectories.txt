@@ -1,3 +1,0 @@
-/Users/taufiq/Documents/chippy/CMakeFiles/chippy.dir
-/Users/taufiq/Documents/chippy/CMakeFiles/edit_cache.dir
-/Users/taufiq/Documents/chippy/CMakeFiles/rebuild_cache.dir
