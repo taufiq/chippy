@@ -4,16 +4,8 @@
 #include <SDL.h>
 #include <cstdlib>
 #include <string_view>
-
-namespace Constants
-{
-    constexpr int height{32};
-    constexpr int width{64};
-    constexpr int scale{10};
-    constexpr int kScreenWidth{width * scale};
-    constexpr int kScreenHeight{height * scale};
-    constexpr int kFps{1};
-}
+#include "constants.h"
+#include "Window.h"
 
 void printByte(char byte)
 {
@@ -33,9 +25,10 @@ public:
     uint16_t indexRegister{0};
     char emulatorDisplay[Constants::width * Constants::height];
     SDL_Window *gWindow{nullptr};
-    SDL_Surface *gSurface{nullptr};
-    uint32_t *pixels{nullptr};
+    SDL_Renderer *gRenderer{nullptr};
     bool gRunning{true};
+    uint16_t stack[16];
+    int8_t stackPointer{-1};
 
     void initialize()
     {
@@ -44,15 +37,12 @@ public:
             std::cout << "Failed to initialize video subsystem" << std::endl;
         };
 
-        if (gWindow = SDL_CreateWindow("Window", Constants::kScreenWidth, Constants::kScreenHeight, SDL_WINDOW_RESIZABLE); gWindow == nullptr)
+        if (SDL_CreateWindowAndRenderer("Window", Constants::kScreenWidth, Constants::kScreenHeight, SDL_WINDOW_RESIZABLE, &gWindow, &gRenderer); gWindow == nullptr)
         {
             std::cout << "Failed creating Window" << std::endl;
         }
-        gSurface = SDL_GetWindowSurface(gWindow);
-        SDL_FillSurfaceRect(gSurface, nullptr, SDL_MapRGB(SDL_GetPixelFormatDetails(SDL_PIXELFORMAT_RGBA32), NULL, 0, 0, 0));
-        pixels = static_cast<uint32_t *>(gSurface->pixels);
 
-        loadFile("ibm.ch8");
+        loadFile("roms/chipper.ch8");
     }
 
     uint16_t peekCurrentInstruction()
@@ -93,6 +83,10 @@ public:
         case 0x00E0:
             clearScreen();
             return;
+        case 0x00EE:
+            SDL_Log("Jump to: %x\n", stack[stackPointer]);
+            programCounter = stack[stackPointer--];
+            break;
         default:
             break;
         }
@@ -102,6 +96,11 @@ public:
         case 0x1:
             programCounter = instruction & 0x0FFF;
             SDL_Log("Jump to: %x\n", programCounter);
+            break;
+        case 0x2:
+            stack[++stackPointer] = programCounter;
+            SDL_Log("jump to: %x\n", instruction & 0x0FFF);
+            programCounter = instruction & 0x0FFF;
             break;
         case 0x6:
             registers[secondNibble] = instruction & 0x00FF;
@@ -121,10 +120,60 @@ public:
             for (unsigned char i = 0; i < fourthNibble; i++)
             {
                 unsigned char row = ram[indexRegister + i];
+                printByte(row);
                 for (int j = 0; j < 8; j++)
                 {
                     emulatorDisplay[(registers[thirdNibble] + i) * Constants::width + registers[secondNibble] + j] = (((1u << (7 - j)) & row) >> (7 - j));
                 }
+            }
+            break;
+        case 0x3:
+            if (registers[secondNibble] == (0x00FF & instruction))
+            {
+                SDL_Log("Checking if V%d=[%x] == %x: Yes.. Skipping", secondNibble, registers[secondNibble], (0x00FF & instruction));
+                programCounter += 2;
+            }
+            else
+            {
+                SDL_Log("Checking if V%d=[%x] == %x: No.. Not Skipping", secondNibble, registers[secondNibble], (0x00FF & instruction));
+            }
+        case 0x4:
+            if (registers[secondNibble] != (0x00FF & instruction))
+            {
+                SDL_Log("Checking if V%d=[%x] != %x Yes.. Skipping", secondNibble, registers[secondNibble], (0x00FF & instruction));
+                programCounter += 2;
+            }
+            else
+            {
+                SDL_Log("Checking if V%d=[%x] != %x No.. Not Skipping", secondNibble, registers[secondNibble], (0x00FF & instruction));
+            }
+            break;
+        case 0x5:
+            if (registers[secondNibble] == registers[thirdNibble])
+            {
+                SDL_Log("Checking if V%d=[%x] == V%d=[%x] Yes.. Skipping", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
+                programCounter += 2;
+            }
+            else
+            {
+                SDL_Log("Checking if V%d=[%x] == V%d=[%x] No.. Not Skipping", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
+            }
+            break;
+        case 0x9:
+            if (registers[secondNibble] != registers[thirdNibble])
+            {
+                SDL_Log("Checking if V%d=[%x] != V%d=[%x] Yes.. Skipping", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
+                programCounter += 2;
+            }
+            else
+            {
+                SDL_Log("Checking if V%d=[%x] != V%d=[%x] No.. Not Skipping", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
+            }
+            break;
+        case 0xF:
+            if ((instruction & 0x00FF) == 0x001E)
+            {
+                indexRegister += registers[secondNibble];
             }
             break;
         default:
@@ -135,11 +184,11 @@ public:
 
     void clearScreen()
     {
-        for (int i = 0; i < Constants::width * Constants::scale; i++)
+        for (int i = 0; i < Constants::width; i++)
         {
-            for (int j = 0; j < Constants::height * Constants::scale; j++)
+            for (int j = 0; j < Constants::height; j++)
             {
-                pixels[j * Constants::kScreenWidth + i] = 0;
+                emulatorDisplay[j * Constants::width + i] = 0;
             }
         }
     }
@@ -152,11 +201,11 @@ public:
             {
                 if (emulatorDisplay[j * Constants::width + i])
                 {
-                    paintPixel(i, j, 0xFFFFFFFF);
+                    paintPixel(i, j, 1);
                 }
                 else
                 {
-                    paintPixel(i, j, 0xFF000000);
+                    paintPixel(i, j, 0);
                 }
             }
         }
@@ -186,10 +235,12 @@ public:
                 }
             }
             uint16_t currentInstruction = consume();
+            SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
+            SDL_RenderClear(gRenderer);
             decode(currentInstruction);
-
             drawScreen();
-            SDL_UpdateWindowSurface(gWindow);
+
+            SDL_RenderPresent(gRenderer);
         }
     }
 
@@ -202,7 +253,15 @@ public:
         {
             for (int startY{y * Constants::scale}; startY < endY; startY++)
             {
-                pixels[startY * Constants::kScreenWidth + startX] = color;
+                if (color == 0)
+                {
+                    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+                }
+                else
+                {
+                    SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
+                }
+                SDL_RenderPoint(gRenderer, startX, startY);
             }
         }
     }
@@ -210,6 +269,7 @@ public:
     void cleanup()
     {
         SDL_DestroyWindow(gWindow);
+        SDL_DestroyRenderer(gRenderer);
         SDL_Quit();
     }
 };
