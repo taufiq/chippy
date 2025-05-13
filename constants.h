@@ -9,6 +9,6 @@ namespace Constants
     constexpr int kScreenHeight{height * scale};
     constexpr int kDebugPanelWidth{100};
     constexpr int kDebugPanelHeight{height * scale};
-    constexpr int kFps{60};
+    constexpr int kFps{30};
 }
 #endif

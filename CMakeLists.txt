@@ -13,7 +13,7 @@ set(SDLTTF_VENDORED ON)
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
 
-add_executable(chippy main.cpp)
+add_executable(chippy main.cpp Window.cpp)
 
 file(COPY roms DESTINATION ${PROJECT_BINARY_DIR})
 
