@@ -25,6 +25,7 @@ void Window::initialize()
     {
         std::cout << "Failed to initialize video subsystem" << std::endl;
     };
+    TTF_Init();
 
     if (SDL_CreateWindowAndRenderer("Window", Constants::kScreenWidth, Constants::kScreenHeight, SDL_WINDOW_RESIZABLE, &gWindow, &gRenderer); gWindow == nullptr)
     {
@@ -44,7 +45,7 @@ void Window::render(SDL_Renderer *renderer)
 {
     for (auto panel : panels)
     {
-        panel->render(renderer);
+        panel->render(renderer, textManager);
     }
 }
 
@@ -251,9 +252,8 @@ void Emulator::clearScreen()
     }
 }
 
-void Emulator::render(SDL_Renderer *renderer)
+void Emulator::render(SDL_Renderer *renderer, TextManager *textManager)
 {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     for (int x{0}; x < Constants::width; x++)
     {
         for (int y{0}; y < Constants::height; y++)
@@ -274,6 +274,7 @@ void Emulator::render(SDL_Renderer *renderer)
 
 void Panel::renderPoint(SDL_Renderer *renderer, int x, int y)
 {
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderPoint(renderer, offsetX + x, offsetY + y);
 }
 
@@ -285,7 +286,7 @@ void Window::cleanup()
     SDL_Quit();
 }
 
-void Panel::render(SDL_Renderer *renderer) {}
+void Panel::render(SDL_Renderer *renderer, TextManager *textManager) {}
 
 void Window::addPanel(Panel *panel)
 {
@@ -297,7 +298,7 @@ void TextManager::initialize(SDL_Renderer *renderer)
 {
 
     textEngine = TTF_CreateRendererTextEngine(renderer);
-    gFont = TTF_OpenFont("fonts/font.ttf", 8);
+    gFont = TTF_OpenFont("fonts/font.ttf", 20);
 }
 
 void TextManager::cleanup()
@@ -308,4 +309,11 @@ void TextManager::cleanup()
 TTF_Text *TextManager::createText(std::string text)
 {
     return TTF_CreateText(textEngine, gFont, text.c_str(), text.length());
+}
+
+void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
+{
+    TTF_Text *text = textManager->createText("Hello World");
+    TTF_SetTextColor(text, 255, 255, 255, 255);
+    TTF_DrawRendererText(text, 0.0f, 0.0f);
 }

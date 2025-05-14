@@ -5,6 +5,18 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #pragma once
 
+class TextManager
+{
+private:
+    TTF_TextEngine *textEngine{nullptr};
+    TTF_Font *gFont{nullptr};
+
+public:
+    void initialize(SDL_Renderer *renderer);
+    TTF_Text *createText(std::string text);
+    void cleanup();
+};
+
 class Panel
 {
 private:
@@ -16,7 +28,7 @@ public:
     int getOffsetX() { return offsetX; };
     int getOffsetY() { return offsetY; };
     void setOffsetX(int x) { offsetX = x; };
-    virtual void render(SDL_Renderer *renderer);
+    virtual void render(SDL_Renderer *renderer, TextManager *textManager);
     void renderPoint(SDL_Renderer *renderer, int x, int y);
 };
 
@@ -40,24 +52,21 @@ public:
     uint16_t consume();
     void decode(uint16_t instruction);
     void clearScreen();
-    void render(SDL_Renderer *renderer) override;
+    void render(SDL_Renderer *renderer, TextManager *textManager) override;
     Emulator(int w, int h) : Panel(w, h) {};
 };
-class TextManager
-{
-private:
-    TTF_TextEngine *textEngine{nullptr};
-    TTF_Font *gFont{nullptr};
 
+class DebugPanel : public Panel
+{
 public:
-    void initialize(SDL_Renderer *renderer);
-    TTF_Text *createText(std::string text);
-    void cleanup();
+    void render(SDL_Renderer *renderer, TextManager *textManager) override;
+    DebugPanel(int w, int h) : Panel(w, h) {};
 };
+
 class Window
 {
 private:
-    Panel debugPanel{Constants::kDebugPanelWidth, Constants::kDebugPanelHeight};
+    DebugPanel debugPanel{Constants::kDebugPanelWidth, Constants::kDebugPanelHeight};
     Emulator emulator{Constants::kScreenWidth, Constants::kScreenHeight};
     std::vector<Panel *> panels{};
     SDL_Window *gWindow{nullptr};
