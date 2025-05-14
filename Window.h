@@ -2,18 +2,22 @@
 #include "constants.h"
 #include <string_view>
 #include <vector>
+#include <SDL3_ttf/SDL_ttf.h>
 #pragma once
 
 class Panel
 {
 private:
-    int w{}, h{};
+    int w{}, h{}, offsetX{}, offsetY{};
 
 public:
     Panel(int _w, int _h);
-    int getWidth();
-    virtual void draw(SDL_Renderer *renderer);
-    void drawPoint(SDL_Renderer *renderer, int x, int y, int color);
+    int getWidth() { return w; };
+    int getOffsetX() { return offsetX; };
+    int getOffsetY() { return offsetY; };
+    void setOffsetX(int x) { offsetX = x; };
+    virtual void render(SDL_Renderer *renderer);
+    void renderPoint(SDL_Renderer *renderer, int x, int y);
 };
 
 class Emulator : public Panel
@@ -36,26 +40,41 @@ public:
     uint16_t consume();
     void decode(uint16_t instruction);
     void clearScreen();
-    void drawScreen();
-    void paintPixel(int x, int y, uint32_t color);
-    void draw(SDL_Renderer *renderer) override;
+    void render(SDL_Renderer *renderer) override;
     Emulator(int w, int h) : Panel(w, h) {};
+};
+class TextManager
+{
+private:
+    TTF_TextEngine *textEngine{nullptr};
+    TTF_Font *gFont{nullptr};
+
+public:
+    void initialize(SDL_Renderer *renderer);
+    TTF_Text *createText(std::string text);
+    void cleanup();
 };
 class Window
 {
 private:
     Panel debugPanel{Constants::kDebugPanelWidth, Constants::kDebugPanelHeight};
     Emulator emulator{Constants::kScreenWidth, Constants::kScreenHeight};
-    std::vector<Panel> panels{debugPanel, emulator};
+    std::vector<Panel *> panels{};
     SDL_Window *gWindow{nullptr};
     SDL_Renderer *gRenderer{nullptr};
+    TextManager *textManager{nullptr};
+    TTF_TextEngine *gTextEngine{nullptr};
+    TTF_Font *gFont{nullptr};
 
 public:
-    Window();
-    void initialize();
+    Window(TextManager *_textManager) : textManager{_textManager} {};
+    void addPanel(Panel *panel);
     void cleanup();
-    void draw(SDL_Renderer *renderer);
-    int getTotalWidth();
+    TextManager *getTextManager() { return textManager; };
     int getTotalHeight();
+    int getTotalWidth();
+    void initialize();
+    void render(SDL_Renderer *renderer);
+    void renderPoint(int x, int y, Panel &panel);
     void run();
 };

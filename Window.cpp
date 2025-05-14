@@ -1,11 +1,12 @@
+#include "Window.h"
 #include <SDL.h>
 #include "constants.h"
-#include "Window.h"
 #include <iostream>
 #include <iterator>
 #include <fstream>
 #include <vector>
 #include <string_view>
+#include <SDL3_ttf/SDL_ttf.h>
 
 int gRunning{true};
 
@@ -30,20 +31,21 @@ void Window::initialize()
         std::cout << "Failed creating Window" << std::endl;
     }
 
+    Window::addPanel(&debugPanel);
+    Window::addPanel(&emulator);
+
     emulator.initialize();
+    textManager->initialize(gRenderer);
+
+    SDL_SetWindowSize(gWindow, Window::getTotalWidth(), Window::getTotalHeight());
 }
 
-Window::Window() {}
-
-void Window::draw(SDL_Renderer *renderer)
+void Window::render(SDL_Renderer *renderer)
 {
-    // debugPanel.draw(renderer);
-    emulator.draw(renderer);
-}
-
-int Panel::getWidth()
-{
-    return w;
+    for (auto panel : panels)
+    {
+        panel->render(renderer);
+    }
 }
 
 int Window::getTotalWidth()
@@ -51,7 +53,7 @@ int Window::getTotalWidth()
     int width{0};
     for (auto p : panels)
     {
-        width += p.getWidth();
+        width += p->getWidth();
     }
     return width;
 }
@@ -88,7 +90,7 @@ void Window::run()
         SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
         SDL_RenderClear(gRenderer);
         emulator.decode(currentInstruction);
-        draw(gRenderer);
+        render(gRenderer);
 
         SDL_RenderPresent(gRenderer);
     }
@@ -249,7 +251,7 @@ void Emulator::clearScreen()
     }
 }
 
-void Emulator::draw(SDL_Renderer *renderer)
+void Emulator::render(SDL_Renderer *renderer)
 {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     for (int x{0}; x < Constants::width; x++)
@@ -262,7 +264,7 @@ void Emulator::draw(SDL_Renderer *renderer)
                 {
                     for (int startY{y * Constants::scale}; startY < (y + 1) * Constants::scale; startY++)
                     {
-                        SDL_RenderPoint(renderer, startX, startY);
+                        renderPoint(renderer, startX, startY);
                     }
                 }
             }
@@ -270,11 +272,40 @@ void Emulator::draw(SDL_Renderer *renderer)
     }
 }
 
+void Panel::renderPoint(SDL_Renderer *renderer, int x, int y)
+{
+    SDL_RenderPoint(renderer, offsetX + x, offsetY + y);
+}
+
 void Window::cleanup()
 {
     SDL_DestroyWindow(gWindow);
     SDL_DestroyRenderer(gRenderer);
+    textManager->cleanup();
     SDL_Quit();
 }
 
-void Panel::draw(SDL_Renderer *renderer) {}
+void Panel::render(SDL_Renderer *renderer) {}
+
+void Window::addPanel(Panel *panel)
+{
+    panel->setOffsetX(Window::getTotalWidth());
+    panels.push_back(panel);
+}
+
+void TextManager::initialize(SDL_Renderer *renderer)
+{
+
+    textEngine = TTF_CreateRendererTextEngine(renderer);
+    gFont = TTF_OpenFont("fonts/font.ttf", 8);
+}
+
+void TextManager::cleanup()
+{
+    TTF_CloseFont(gFont);
+}
+
+TTF_Text *TextManager::createText(std::string text)
+{
+    return TTF_CreateText(textEngine, gFont, text.c_str(), text.length());
+}

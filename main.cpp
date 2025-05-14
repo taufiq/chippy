@@ -7,11 +7,13 @@
 #include "constants.h"
 #include "Window.h"
 
+TextManager gTextManager{};
+Window gWindow{&gTextManager};
+
 int main()
 {
-    Window window{};
-    window.initialize();
-    window.run();
-    window.cleanup();
+    gWindow.initialize();
+    gWindow.run();
+    gWindow.cleanup();
     return 0;
 }
