@@ -1,21 +1,14 @@
+#pragma once
+
+#include "TextManager.h"
 #include <SDL.h>
 #include "constants.h"
 #include <string_view>
 #include <vector>
 #include <SDL3_ttf/SDL_ttf.h>
-#pragma once
+#include "Node.h"
 
-class TextManager
-{
-private:
-    TTF_TextEngine *textEngine{nullptr};
-    TTF_Font *gFont{nullptr};
-
-public:
-    void initialize(SDL_Renderer *renderer);
-    TTF_Text *createText(std::string text);
-    void cleanup();
-};
+std::string stringifyRegisters(char *registers);
 
 class Panel
 {
@@ -25,10 +18,12 @@ private:
 public:
     Panel(int _w, int _h);
     int getWidth() { return w; };
+    int getHeight() { return h; };
     int getOffsetX() { return offsetX; };
     int getOffsetY() { return offsetY; };
     void setOffsetX(int x) { offsetX = x; };
     virtual void render(SDL_Renderer *renderer, TextManager *textManager);
+    virtual std::unique_ptr<UI::Node> getTree();
     void renderPoint(SDL_Renderer *renderer, int x, int y);
 };
 
@@ -53,13 +48,21 @@ public:
     void decode(uint16_t instruction);
     void clearScreen();
     void render(SDL_Renderer *renderer, TextManager *textManager) override;
+    char *getRegisters() { return registers; };
+    std::unique_ptr<UI::Node> getTree() override;
     Emulator(int w, int h) : Panel(w, h) {};
 };
 
 class DebugPanel : public Panel
 {
+private:
+    Emulator *emulator{nullptr};
+
 public:
+    void setEmulator(Emulator *_emulator) { emulator = _emulator; };
+    Emulator *getEmulator() { return emulator; };
     void render(SDL_Renderer *renderer, TextManager *textManager) override;
+    std::unique_ptr<UI::Node> getTree() override;
     DebugPanel(int w, int h) : Panel(w, h) {};
 };
 

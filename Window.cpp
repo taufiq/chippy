@@ -1,4 +1,6 @@
 #include "Window.h"
+#include "Box.h"
+#include "Text.h"
 #include <SDL.h>
 #include "constants.h"
 #include <iostream>
@@ -6,7 +8,9 @@
 #include <fstream>
 #include <vector>
 #include <string_view>
+#include <sstream>
 #include <SDL3_ttf/SDL_ttf.h>
+#include "TextManager.h"
 
 int gRunning{true};
 
@@ -19,13 +23,26 @@ void printByte(char byte)
     std::cout << std::endl;
 }
 
+std::string stringifyRegisters(char *registers)
+{
+    std::stringstream ss;
+    for (int i{0}; i < 16; i++)
+    {
+        ss << "V" << i << ":" << static_cast<int>(registers[i]) << "\n";
+    }
+    return ss.str();
+}
+
 void Window::initialize()
 {
     if (!SDL_Init(SDL_INIT_VIDEO))
     {
         std::cout << "Failed to initialize video subsystem" << std::endl;
     };
-    TTF_Init();
+    if (TTF_Init() == false)
+    {
+        SDL_Log("Failed to Initialize TTF!");
+    };
 
     if (SDL_CreateWindowAndRenderer("Window", Constants::kScreenWidth, Constants::kScreenHeight, SDL_WINDOW_RESIZABLE, &gWindow, &gRenderer); gWindow == nullptr)
     {
@@ -36,6 +53,8 @@ void Window::initialize()
     Window::addPanel(&emulator);
 
     emulator.initialize();
+
+    debugPanel.setEmulator(&emulator);
     textManager->initialize(gRenderer);
 
     SDL_SetWindowSize(gWindow, Window::getTotalWidth(), Window::getTotalHeight());
@@ -101,7 +120,7 @@ Panel::Panel(int _w, int _h) : w{_w}, h{_h} {};
 
 void Emulator::initialize()
 {
-    loadFile("roms/chipper.ch8");
+    loadFile("roms/ibm.ch8");
 }
 
 uint16_t Emulator::peekCurrentInstruction()
@@ -294,26 +313,38 @@ void Window::addPanel(Panel *panel)
     panels.push_back(panel);
 }
 
-void TextManager::initialize(SDL_Renderer *renderer)
-{
-
-    textEngine = TTF_CreateRendererTextEngine(renderer);
-    gFont = TTF_OpenFont("fonts/font.ttf", 20);
-}
-
-void TextManager::cleanup()
-{
-    TTF_CloseFont(gFont);
-}
-
-TTF_Text *TextManager::createText(std::string text)
-{
-    return TTF_CreateText(textEngine, gFont, text.c_str(), text.length());
-}
-
 void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
 {
-    TTF_Text *text = textManager->createText("Hello World");
-    TTF_SetTextColor(text, 255, 255, 255, 255);
-    TTF_DrawRendererText(text, 0.0f, 0.0f);
+    std::unique_ptr<UI::Node> treeToRender = getTree();
+    UI::Context ctx{};
+    treeToRender->measure(textManager, this->getWidth(), this->getHeight());
+    treeToRender->render(renderer, textManager, &ctx);
+    // TTF_Text *text = textManager->createText(stringifyRegisters(emulator->getRegisters()));
+    // TTF_SetTextColor(text, 255, 255, 255, 255);
+    // TTF_DrawRendererText(text, 0.0f, 0.0f);
+}
+
+std::unique_ptr<UI::Node> DebugPanel::getTree()
+{
+    std::unique_ptr<UI::Box> box = std::make_unique<UI::Box>(0xFFFF00FF, 0, 0);
+    box->setBounds({0,
+                    0,
+                    this->getWidth(),
+                    this->getHeight()});
+    box->setPaddingX(4);
+    for (int i = 0; i < 16; i++)
+    {
+        std::string registerValue{"V" + std::to_string(i) + ": " + std::to_string(static_cast<int>(this->getEmulator()->registers[i]))};
+        std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(NULL, NULL, registerValue);
+        box->addChild(std::move(textBox));
+    }
+    return box;
+}
+
+std::unique_ptr<UI::Node> Emulator::getTree()
+{
+}
+
+std::unique_ptr<UI::Node> Panel::getTree()
+{
 }
