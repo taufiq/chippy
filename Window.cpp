@@ -319,14 +319,11 @@ void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
     UI::Context ctx{};
     treeToRender->measure(textManager, this->getWidth(), this->getHeight());
     treeToRender->render(renderer, textManager, &ctx);
-    // TTF_Text *text = textManager->createText(stringifyRegisters(emulator->getRegisters()));
-    // TTF_SetTextColor(text, 255, 255, 255, 255);
-    // TTF_DrawRendererText(text, 0.0f, 0.0f);
 }
 
 std::unique_ptr<UI::Node> DebugPanel::getTree()
 {
-    std::unique_ptr<UI::Box> box = std::make_unique<UI::Box>(0xFFFF00FF, 0, 0);
+    std::unique_ptr<UI::Box> box = std::make_unique<UI::Box>();
     box->setBounds({0,
                     0,
                     this->getWidth(),
@@ -335,7 +332,7 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
     for (int i = 0; i < 16; i++)
     {
         std::string registerValue{"V" + std::to_string(i) + ": " + std::to_string(static_cast<int>(this->getEmulator()->registers[i]))};
-        std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(NULL, NULL, registerValue);
+        std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(registerValue);
         box->addChild(std::move(textBox));
     }
     return box;

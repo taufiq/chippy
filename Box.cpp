@@ -4,18 +4,6 @@
 
 namespace UI
 {
-    Box::Box(std::optional<uint64_t> _backgroundColor,
-             std::optional<uint64_t> _borderColor,
-             std::optional<uint8_t> _borderThickness)
-    {
-        if (_backgroundColor)
-            backgroundColor = _backgroundColor.value();
-        if (_borderColor)
-            borderColor = _borderColor.value();
-        if (_borderThickness)
-            borderThickness = _borderThickness.value();
-    };
-
     void Box::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
     {
         SDL_FRect rectangle{
@@ -23,7 +11,12 @@ namespace UI
             static_cast<float>(this->getBounds().y),
             static_cast<float>(this->getBounds().w),
             static_cast<float>(this->getBounds().h)};
-        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+        SDL_SetRenderDrawColor(
+            renderer,
+            this->style.backgroundColor.x,
+            this->style.backgroundColor.y,
+            this->style.backgroundColor.z,
+            this->style.backgroundColor.w);
         SDL_RenderFillRect(renderer, &rectangle);
         for (auto &child : this->getChildren())
         {
@@ -33,20 +26,17 @@ namespace UI
 
     void Box::measure(TextManager *textManager, int availableWidth, int availableHeight)
     {
-        this->bounds.x += this->paddingX;
-        this->bounds.y += this->paddingY;
         int x{this->bounds.x}, y{this->bounds.y};
         int rowHeight{0};
 
         this->bounds.w = availableWidth;
 
         size_t childrenCount = children.size();
-        int originalAvailableWidth{availableWidth};
 
         for (auto &child : children)
         {
-            child->measure(textManager, originalAvailableWidth, availableHeight);
-            if (x + this->paddingX + child->getBounds().w > originalAvailableWidth)
+            child->measure(textManager, availableWidth, availableHeight);
+            if (x + this->style.paddingX + child->getBounds().w > availableWidth)
             {
                 x = this->bounds.x;
                 y += rowHeight;
@@ -61,7 +51,7 @@ namespace UI
             });
 
             rowHeight = std::max(rowHeight, child->getBounds().h);
-            x += child->getBounds().w + this->paddingX;
+            x += child->getBounds().w + this->style.paddingX;
         }
     }
 

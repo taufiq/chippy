@@ -3,6 +3,7 @@
 #include <vector>
 #include <SDL.h>
 #include "TextManager.h"
+#include "Vec.h"
 
 namespace UI
 {
@@ -14,10 +15,22 @@ namespace UI
     {
         UI::Bounds parentBounds{}, additionalBounds{};
     };
+    class Style
+    {
+    public:
+        uint8_t borderThickness{0};
+        uint16_t paddingX{0};
+        uint16_t paddingY{0};
+        struct Vec4 backgroundColor{0, 0, 0, 255};
+        struct Vec4 borderColor{0, 0, 0, 255};
+        struct Vec4 textColor{255, 255, 255, 255};
+    };
     class Node
     {
     protected:
         std::vector<std::unique_ptr<Node>> children;
+        Style style{};
+
         struct Bounds bounds{};
 
     public:
@@ -35,16 +48,5 @@ namespace UI
         }
         virtual void measure(TextManager *textManager, int availableWidth, int availableHeight) = 0;
         virtual ~Node() = default;
-    };
-
-    class Style
-    {
-    protected:
-        uint8_t borderThickness{0};
-        uint16_t paddingX{0};
-        uint16_t paddingY{0};
-        uint64_t backgroundColor{0};
-        uint64_t borderColor{0};
-        uint64_t textColor{0};
     };
 }
