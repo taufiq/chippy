@@ -313,6 +313,7 @@ void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
 std::unique_ptr<UI::Node> DebugPanel::getTree()
 {
     std::unique_ptr<UI::Box> box = std::make_unique<UI::Box>();
+    box->setLayoutMode(UI::LayoutMode::VERTICAL);
     box->setBounds({0,
                     0,
                     this->getWidth(),

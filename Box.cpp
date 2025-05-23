@@ -27,31 +27,57 @@ namespace UI
     void Box::measure(TextManager *textManager, int availableWidth, int availableHeight)
     {
         int x{this->bounds.x}, y{this->bounds.y};
-        int rowHeight{0};
-
-        this->bounds.w = availableWidth;
-
-        size_t childrenCount = children.size();
-
-        for (auto &child : children)
+        if (layoutMode == LayoutMode::HORIZONTAL)
         {
-            child->measure(textManager, availableWidth, availableHeight);
-            if (x + this->style.paddingX + child->getBounds().w > availableWidth)
+            int rowHeight{0};
+            this->bounds.w = availableWidth;
+
+            for (auto &child : children)
             {
-                x = this->bounds.x;
-                y += rowHeight;
-                rowHeight = 0;
+                child->measure(textManager, availableWidth, availableHeight);
+                if (x + this->style.paddingX + child->getBounds().w > availableWidth)
+                {
+                    x = this->bounds.x;
+                    y += rowHeight;
+                    rowHeight = 0;
+                }
+
+                child->setBounds({
+                    x,
+                    y,
+                    child->getBounds().w,
+                    child->getBounds().h,
+                });
+
+                rowHeight = std::max(rowHeight, child->getBounds().h);
+                x += child->getBounds().w + this->style.paddingX;
             }
+        }
+        else
+        {
+            int rowHeight{0};
+            this->bounds.h = availableHeight;
 
-            child->setBounds({
-                x,
-                y,
-                child->getBounds().w,
-                child->getBounds().h,
-            });
+            for (auto &child : children)
+            {
+                child->measure(textManager, availableWidth, availableHeight);
+                if (y + this->style.paddingY + child->getBounds().h > availableHeight)
+                {
+                    y = this->bounds.y;
+                    x += rowHeight;
+                    rowHeight = 0;
+                }
 
-            rowHeight = std::max(rowHeight, child->getBounds().h);
-            x += child->getBounds().w + this->style.paddingX;
+                child->setBounds({
+                    x,
+                    y,
+                    child->getBounds().w,
+                    child->getBounds().h,
+                });
+
+                rowHeight = std::max(rowHeight, child->getBounds().h);
+                y += child->getBounds().h + this->style.paddingY;
+            }
         }
     }
 

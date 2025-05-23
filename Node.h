@@ -24,6 +24,7 @@ namespace UI
         struct Vec4 backgroundColor{0, 0, 0, 255};
         struct Vec4 borderColor{0, 0, 0, 255};
         struct Vec4 textColor{255, 255, 255, 255};
+        int flex{1};
     };
     class Node
     {

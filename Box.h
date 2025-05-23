@@ -4,9 +4,20 @@
 
 namespace UI
 {
+
+    enum class LayoutMode
+    {
+        HORIZONTAL,
+        VERTICAL,
+    };
+
     class Box : public Node
     {
+    private:
+        LayoutMode layoutMode{LayoutMode::HORIZONTAL};
+
     public:
+        void setLayoutMode(LayoutMode _layoutMode) { layoutMode = _layoutMode; };
         void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) override;
         void measure(TextManager *textManager, int availableWidth, int availableHeight) override;
 
