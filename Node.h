@@ -36,7 +36,7 @@ namespace UI
     public:
         std::vector<std::unique_ptr<Node>> &getChildren() { return children; };
         virtual void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) = 0;
-        void setBounds(Bounds _bounds)
+        virtual void setBounds(Bounds _bounds)
         {
             bounds = _bounds;
         };

@@ -56,26 +56,3 @@ namespace UI
     }
 
 }
-/*
-Box -> [Text1, Text2]
-
-I have given W,H.
-
-I have N Texts, each with a variable string length. I have the following constraints.
-Do I have a minimumWidth?
-I want to avoid this situation.
-"
-as
-d
-f
-c
-a
-d
-"
-If I say I want to fit everything without wrapping, then what happens in the case of a too long text?
-
-Cases:
-Width =>
-    Original -> if need to wrap, ok! If don't need, ok!
-    Modified -> if don't need wrap, render! If need... ?
-*/

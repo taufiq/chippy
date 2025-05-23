@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Canvas.h"
 #include "Box.h"
 #include "Text.h"
 #include <SDL.h>
@@ -273,22 +274,10 @@ void Emulator::clearScreen()
 
 void Emulator::render(SDL_Renderer *renderer, TextManager *textManager)
 {
-    for (int x{0}; x < Constants::width; x++)
-    {
-        for (int y{0}; y < Constants::height; y++)
-        {
-            if (emulatorDisplay[y * Constants::width + x])
-            {
-                for (int startX{x * Constants::scale}; startX < (x + 1) * Constants::scale; startX++)
-                {
-                    for (int startY{y * Constants::scale}; startY < (y + 1) * Constants::scale; startY++)
-                    {
-                        renderPoint(renderer, startX, startY);
-                    }
-                }
-            }
-        }
-    }
+    std::unique_ptr<UI::Node> treeToRender = getTree();
+    UI::Context ctx{};
+    treeToRender->measure(textManager, this->getWidth(), this->getHeight());
+    treeToRender->render(renderer, textManager, &ctx);
 }
 
 void Panel::renderPoint(SDL_Renderer *renderer, int x, int y)
@@ -340,6 +329,34 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
 
 std::unique_ptr<UI::Node> Emulator::getTree()
 {
+    std::unique_ptr<UI::Canvas> canvas = std::make_unique<UI::Canvas>(Constants::width * Constants::scale, Constants::height * Constants::scale);
+    canvas->setBounds({.x = getOffsetX(),
+                       .y = getOffsetY(),
+                       .w = Constants::width * Constants::scale,
+                       .h = Constants::height * Constants::scale});
+
+    for (int x{0}; x < Constants::width; x++)
+    {
+        for (int y{0}; y < Constants::height; y++)
+        {
+            if (emulatorDisplay[y * Constants::width + x])
+            {
+                for (int startX{x * Constants::scale}; startX < (x + 1) * Constants::scale; startX++)
+                {
+                    for (int startY{y * Constants::scale}; startY < (y + 1) * Constants::scale; startY++)
+                    {
+                        canvas->pixels[startY * (Constants::width * Constants::scale) + startX] = (Vec4){
+                            .x = 0xFF,
+                            .y = 0xFF,
+                            .z = 0xFF,
+                            .w = 0xFF,
+                        };
+                    }
+                }
+            }
+        }
+    }
+    return canvas;
 }
 
 std::unique_ptr<UI::Node> Panel::getTree()
