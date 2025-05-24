@@ -10,11 +10,13 @@ namespace UI
     {
     private:
         std::string value;
+        Bounds minimumBoundsForText{};
 
     public:
         void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) override;
         Text(std::string _value);
         void measure(TextManager *textManager, int availableWidth, int availableHeight) override;
+        void setBounds(Bounds _bounds) override;
     };
 }
 #endif

@@ -12,6 +12,7 @@
 #include <sstream>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "TextManager.h"
+#include <random>
 
 int gRunning{true};
 
@@ -313,12 +314,12 @@ void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
 std::unique_ptr<UI::Node> DebugPanel::getTree()
 {
     std::unique_ptr<UI::Box> box = std::make_unique<UI::Box>();
-    box->setLayoutMode(UI::LayoutMode::VERTICAL);
+    box->setLayoutMode(UI::LayoutMode::HORIZONTAL);
     box->setBounds({0,
                     0,
                     this->getWidth(),
                     this->getHeight()});
-    box->setPaddingX(4);
+    box->style.paddingX = 16;
     for (int i = 0; i < 16; i++)
     {
         std::string registerValue{"V" + std::to_string(i) + ": " + std::to_string(static_cast<int>(this->getEmulator()->registers[i]))};
@@ -342,15 +343,17 @@ std::unique_ptr<UI::Node> Emulator::getTree()
         {
             if (emulatorDisplay[y * Constants::width + x])
             {
+                Vec4 randomVector{rand() % 255, rand() % 255, rand() % 255, 255};
+                Vec4 whiteVector{255, 255, 255, 255};
                 for (int startX{x * Constants::scale}; startX < (x + 1) * Constants::scale; startX++)
                 {
                     for (int startY{y * Constants::scale}; startY < (y + 1) * Constants::scale; startY++)
                     {
                         canvas->pixels[startY * (Constants::width * Constants::scale) + startX] = (Vec4){
-                            .x = 0xFF,
-                            .y = 0xFF,
-                            .z = 0xFF,
-                            .w = 0xFF,
+                            .x = whiteVector.x,
+                            .y = whiteVector.y,
+                            .z = whiteVector.z,
+                            .w = whiteVector.w,
                         };
                     }
                 }

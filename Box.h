@@ -20,6 +20,7 @@ namespace UI
         void setLayoutMode(LayoutMode _layoutMode) { layoutMode = _layoutMode; };
         void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) override;
         void measure(TextManager *textManager, int availableWidth, int availableHeight) override;
+        void layoutChildrenEvenly(int i, int j, int startingX, int startingY, int availableWidth);
 
         void setPaddingX(int _p) { style.paddingX = _p; };
     };

@@ -13,7 +13,13 @@ namespace UI
     };
     struct Context
     {
-        UI::Bounds parentBounds{}, additionalBounds{};
+        [[maybe_unused]] UI::Bounds parentBounds{}, additionalBounds{};
+    };
+    enum class Alignment
+    {
+        LEFT,
+        CENTER,
+        RIGHT
     };
     class Style
     {
@@ -24,18 +30,19 @@ namespace UI
         struct Vec4 backgroundColor{0, 0, 0, 255};
         struct Vec4 borderColor{0, 0, 0, 255};
         struct Vec4 textColor{255, 255, 255, 255};
+        Alignment alignment{Alignment::CENTER};
         int flex{1};
     };
     class Node
     {
     protected:
         std::vector<std::unique_ptr<Node>> children;
-        Style style{};
 
         struct Bounds bounds{};
 
     public:
         std::vector<std::unique_ptr<Node>> &getChildren() { return children; };
+        Style style{};
         virtual void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) = 0;
         virtual void setBounds(Bounds _bounds)
         {
