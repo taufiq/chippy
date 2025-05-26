@@ -1,9 +1,24 @@
 #include "Box.h"
-#include "SDL.h"
+#include <SDL3/SDL.h>
 #include "TextManager.h"
+#include <utility>
 
 namespace UI
 {
+    void Box::setBounds(Bounds _bounds)
+    {
+        int dX{_bounds.x - bounds.x}, dY{_bounds.y - bounds.y};
+        for (auto &child : children)
+        {
+            // We recursively offset child elements with the new position shift
+            Bounds childBounds{child->getBounds()};
+            child->setBounds({childBounds.x + dX,
+                              childBounds.y + dY,
+                              childBounds.w,
+                              childBounds.h});
+        }
+        Node::setBounds(_bounds);
+    }
     void Box::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
     {
         SDL_FRect rectangle{
@@ -42,45 +57,44 @@ namespace UI
 
     void Box::measure(TextManager *textManager, int availableWidth, int availableHeight)
     {
-        int startingX{bounds.x + style.paddingX}, startingY{bounds.y + style.paddingY};
-        int x{bounds.x + style.paddingX}, y{bounds.y + style.paddingY};
-        if (layoutMode == LayoutMode::HORIZONTAL)
+        int startingX{bounds.x}, startingY{bounds.y};
+        int x{startingX}, y{startingY};
+        int rowHeight{0}, totalHeight{0};
+
+        setBounds({x, y, availableWidth, getBounds().h});
+        for (size_t i{0}; i < children.size(); i++)
         {
-            int rowHeight{0};
-            bounds.w = availableWidth;
-
-            int availableWidthForChildren = availableWidth - style.paddingX * 2;
-
-            // Range to keep track of children row count
-            // used for doing a second pass to distribute children evenly
-            // [begin, i)
-            size_t begin{0};
-            for (size_t i{0}; i < children.size(); i++)
+            auto &child = children.at(i);
+            child->measure(textManager, availableWidth, availableHeight);
+            if (x + child->getBounds().w > availableWidth)
             {
-                auto &child = children.at(i);
-                child->measure(textManager, availableWidthForChildren, availableHeight);
-
-                if (x + child->getBounds().w > availableWidthForChildren)
-                {
-                    Box::layoutChildrenEvenly(begin, i, startingX, y, availableWidthForChildren);
-                    begin = i;
-                    x = startingX;
-                    y += rowHeight;
-                    rowHeight = 0;
-                }
-
-                child->setBounds({
-                    x,
-                    y,
-                    child->getBounds().w,
-                    child->getBounds().h,
-                });
-
-                rowHeight = std::max(rowHeight, child->getBounds().h);
-                x += child->getBounds().w;
+                x = startingX;
+                y += rowHeight;
+                totalHeight += rowHeight;
+                rowHeight = 0;
             }
-            Box::layoutChildrenEvenly(begin, children.size(), startingX, y, availableWidthForChildren);
+            rowHeight = std::max(rowHeight, child->getBounds().h);
+            child->setBounds({x,
+                              y,
+                              child->getBounds().w,
+                              child->getBounds().h});
+            x += child->getBounds().w;
         }
+        totalHeight += rowHeight;
+        setBounds({
+            getBounds().x,
+            getBounds().y,
+            getBounds().w,
+            totalHeight,
+        });
     }
-
 }
+// }
+/**
+ * Box -> Measure its children
+ * Children returns height
+ * Box child
+ * -> Text -> Text::measure()
+ * -> Box -> Box::measure()
+ *
+ */

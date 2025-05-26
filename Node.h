@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "TextManager.h"
 #include "Vec.h"
 
@@ -42,6 +42,7 @@ namespace UI
 
     public:
         std::vector<std::unique_ptr<Node>> &getChildren() { return children; };
+        Node *parent{nullptr};
         Style style{};
         virtual void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) = 0;
         virtual void setBounds(Bounds _bounds)
@@ -52,6 +53,7 @@ namespace UI
         Bounds &getBounds() { return bounds; };
         void addChild(std::unique_ptr<Node> node)
         {
+            node->parent = this;
             children.push_back(std::move(node));
         }
         virtual void measure(TextManager *textManager, int availableWidth, int availableHeight) = 0;

@@ -21,6 +21,7 @@ namespace UI
         void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) override;
         void measure(TextManager *textManager, int availableWidth, int availableHeight) override;
         void layoutChildrenEvenly(int i, int j, int startingX, int startingY, int availableWidth);
+        void setBounds(Bounds _bounds) override;
 
         void setPaddingX(int _p) { style.paddingX = _p; };
     };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "TextManager.h"
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "constants.h"
 #include <string_view>
 #include <vector>

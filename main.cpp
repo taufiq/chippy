@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iterator>
 #include <fstream>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <cstdlib>
 #include <string_view>
 #include "constants.h"

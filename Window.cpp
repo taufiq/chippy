@@ -2,7 +2,7 @@
 #include "Canvas.h"
 #include "Box.h"
 #include "Text.h"
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "constants.h"
 #include <iostream>
 #include <iterator>
@@ -122,7 +122,7 @@ Panel::Panel(int _w, int _h) : w{_w}, h{_h} {};
 
 void Emulator::initialize()
 {
-    loadFile("roms/ibm.ch8");
+    loadFile("roms/chipper.ch8");
 }
 
 uint16_t Emulator::peekCurrentInstruction()
@@ -320,11 +320,17 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
                     this->getWidth(),
                     this->getHeight()});
     box->style.paddingX = 16;
+    std::unique_ptr<UI::Box> innerBox{std::make_unique<UI::Box>()};
     for (int i = 0; i < 16; i++)
     {
         std::string registerValue{"V" + std::to_string(i) + ": " + std::to_string(static_cast<int>(this->getEmulator()->registers[i]))};
         std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(registerValue);
-        box->addChild(std::move(textBox));
+        innerBox->addChild(std::move(textBox));
+        if (i != 0 && i % 3 == 0)
+        {
+            box->addChild(std::move(innerBox));
+            innerBox = std::make_unique<UI::Box>();
+        }
     }
     return box;
 }

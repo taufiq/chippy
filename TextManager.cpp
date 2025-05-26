@@ -1,10 +1,14 @@
 #include <SDL3_ttf/SDL_ttf.h>
-#include <SDL.h>
+#include <filesystem>
+#include <SDL3/SDL.h>
 #include <string>
 #include "TextManager.h"
 
 void TextManager::initialize(SDL_Renderer *renderer)
 {
+
+    std::filesystem::path cwd = std::filesystem::current_path() / "filename.txt";
+    SDL_Log("%s", cwd.string().c_str());
 
     textEngine = TTF_CreateRendererTextEngine(renderer);
     gFont = TTF_OpenFont("fonts/font.ttf", 20);
