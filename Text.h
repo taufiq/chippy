@@ -13,6 +13,7 @@ namespace UI
         Bounds minimumBoundsForText{};
 
     public:
+        void onMouseMove(float x, float y) override;
         void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) override;
         Text(std::string _value);
         void measure(TextManager *textManager, int availableWidth, int availableHeight) override;

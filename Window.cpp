@@ -106,6 +106,10 @@ void Window::run()
             case SDL_EventType::SDL_EVENT_QUIT:
                 gRunning = false;
                 break;
+            case SDL_EventType::SDL_EVENT_MOUSE_MOTION:
+                onMouseMove(pollEvent.motion.x, pollEvent.motion.y);
+            default:
+                break;
             }
         }
         uint16_t currentInstruction = emulator.consume();
@@ -115,6 +119,17 @@ void Window::run()
         render(gRenderer);
 
         SDL_RenderPresent(gRenderer);
+    }
+}
+
+void Window::onMouseMove(float x, float y)
+{
+    for (auto &panel : panels)
+    {
+        if (x >= panel->getOffsetX() && y >= panel->getOffsetY() && x < panel->getOffsetX() + panel->getWidth() && y < panel->getOffsetY() + panel->getHeight())
+        {
+            panel->onMouseMove(x, y);
+        }
     }
 }
 
@@ -308,6 +323,8 @@ void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
     std::unique_ptr<UI::Node> treeToRender = getTree();
     UI::Context ctx{};
     treeToRender->measure(textManager, this->getWidth(), this->getHeight());
+    // TODO: Terrible way of handling, maybe should convert DebugPanel into a UI element as well.
+    treeToRender->onMouseMove(mouseCoordinates.first, mouseCoordinates.second);
     treeToRender->render(renderer, textManager, &ctx);
 }
 
@@ -326,11 +343,16 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
         std::string registerValue{"V" + std::to_string(i) + ": " + std::to_string(static_cast<int>(this->getEmulator()->registers[i]))};
         std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(registerValue);
         innerBox->addChild(std::move(textBox));
-        if (i != 0 && i % 3 == 0)
+
+        if (innerBox->getChildren().size() == 3)
         {
             box->addChild(std::move(innerBox));
             innerBox = std::make_unique<UI::Box>();
         }
+    }
+    if (innerBox->getChildren().size())
+    {
+        box->addChild(std::move(innerBox));
     }
     return box;
 }
@@ -351,15 +373,17 @@ std::unique_ptr<UI::Node> Emulator::getTree()
             {
                 Vec4 randomVector{rand() % 255, rand() % 255, rand() % 255, 255};
                 Vec4 whiteVector{255, 255, 255, 255};
+                Vec4 vector = whiteVector;
                 for (int startX{x * Constants::scale}; startX < (x + 1) * Constants::scale; startX++)
                 {
+
                     for (int startY{y * Constants::scale}; startY < (y + 1) * Constants::scale; startY++)
                     {
                         canvas->pixels[startY * (Constants::width * Constants::scale) + startX] = (Vec4){
-                            .x = whiteVector.x,
-                            .y = whiteVector.y,
-                            .z = whiteVector.z,
-                            .w = whiteVector.w,
+                            .x = vector.x,
+                            .y = vector.y,
+                            .z = vector.z,
+                            .w = vector.w,
                         };
                     }
                 }
@@ -368,7 +392,13 @@ std::unique_ptr<UI::Node> Emulator::getTree()
     }
     return canvas;
 }
+void DebugPanel::onMouseMove(float x, float y)
+{
+    mouseCoordinates = std::make_pair(x, y);
+};
 
 std::unique_ptr<UI::Node> Panel::getTree()
 {
 }
+
+void Panel::onMouseMove(float x, float y) {}

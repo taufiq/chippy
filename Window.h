@@ -16,6 +16,7 @@ private:
     int w{}, h{}, offsetX{}, offsetY{};
 
 public:
+    virtual void onMouseMove(float x, float y);
     Panel(int _w, int _h);
     int getWidth() { return w; };
     int getHeight() { return h; };
@@ -57,8 +58,10 @@ class DebugPanel : public Panel
 {
 private:
     Emulator *emulator{nullptr};
+    std::pair<float, float> mouseCoordinates{};
 
 public:
+    void onMouseMove(float x, float y) override;
     void setEmulator(Emulator *_emulator) { emulator = _emulator; };
     Emulator *getEmulator() { return emulator; };
     void render(SDL_Renderer *renderer, TextManager *textManager) override;
@@ -79,6 +82,7 @@ private:
     TTF_Font *gFont{nullptr};
 
 public:
+    void onMouseMove(float x, float y);
     Window(TextManager *_textManager) : textManager{_textManager} {};
     void addPanel(Panel *panel);
     void cleanup();

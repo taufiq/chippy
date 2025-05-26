@@ -42,8 +42,10 @@ namespace UI
 
     public:
         std::vector<std::unique_ptr<Node>> &getChildren() { return children; };
+        bool isMouseOver{false};
         Node *parent{nullptr};
         Style style{};
+        virtual void onMouseMove(float x, float y);
         virtual void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) = 0;
         virtual void setBounds(Bounds _bounds)
         {

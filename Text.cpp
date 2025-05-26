@@ -30,7 +30,7 @@ namespace UI
             static_cast<float>(getBounds().w),
             static_cast<float>(getBounds().h),
         };
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0, 0, 0xFF);
+        SDL_SetRenderDrawColor(renderer, 0xFF, isMouseOver ? 0xFF : 0, 0, 0xFF);
         SDL_RenderRect(renderer, &rect);
         switch (style.alignment)
         {
@@ -63,4 +63,10 @@ namespace UI
         minimumBoundsForText.w = bounds.w;
         minimumBoundsForText.h = bounds.h;
     };
+
+    void Text::onMouseMove(float x, float y)
+    {
+        SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value.c_str(), x, y, static_cast<float>(bounds.x), static_cast<float>(bounds.y), isMouseOver);
+    }
+
 }
