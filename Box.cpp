@@ -57,9 +57,12 @@ namespace UI
 
     void Box::measure(TextManager *textManager, int availableWidth, int availableHeight)
     {
-        int startingX{bounds.x}, startingY{bounds.y};
+        int startingX{bounds.x + style.paddingX}, startingY{bounds.y + style.paddingY};
+        availableWidth -= style.paddingX * 2;
         int x{startingX}, y{startingY};
         int rowHeight{0}, totalHeight{0};
+
+        int begin{0};
 
         setBounds({x, y, availableWidth, getBounds().h});
         for (size_t i{0}; i < children.size(); i++)
@@ -68,10 +71,12 @@ namespace UI
             child->measure(textManager, availableWidth, availableHeight);
             if (x + child->getBounds().w > availableWidth)
             {
+                Box::layoutChildrenEvenly(begin, i, startingX, y, availableWidth);
                 x = startingX;
                 y += rowHeight;
                 totalHeight += rowHeight;
                 rowHeight = 0;
+                begin = i;
             }
             rowHeight = std::max(rowHeight, child->getBounds().h);
             child->setBounds({x,
@@ -80,6 +85,7 @@ namespace UI
                               child->getBounds().h});
             x += child->getBounds().w;
         }
+        Box::layoutChildrenEvenly(begin, children.size(), startingX, y, availableWidth);
         totalHeight += rowHeight;
         setBounds({
             getBounds().x,
@@ -89,12 +95,3 @@ namespace UI
         });
     }
 }
-// }
-/**
- * Box -> Measure its children
- * Children returns height
- * Box child
- * -> Text -> Text::measure()
- * -> Box -> Box::measure()
- *
- */
