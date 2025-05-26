@@ -22,6 +22,9 @@ add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
 
 add_executable(chippy main.cpp Window.cpp Box.cpp Text.cpp TextManager.cpp Canvas.cpp)
 
+set(PROGRAM_PERMISSIONS_DEFAULT
+    OWNER_WRITE OWNER_READ OWNER_EXECUTE)
+
 # Ensure debug information is included
 set_target_properties(chippy PROPERTIES
     COMPILE_FLAGS "-g -O0"
