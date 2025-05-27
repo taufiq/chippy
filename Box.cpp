@@ -7,7 +7,7 @@ namespace UI
 {
     void Box::setBounds(Bounds _bounds)
     {
-        int dX{_bounds.x - bounds.x}, dY{_bounds.y - bounds.y};
+        float dX{_bounds.x - bounds.x}, dY{_bounds.y - bounds.y};
         for (auto &child : children)
         {
             // We recursively offset child elements with the new position shift
@@ -22,10 +22,10 @@ namespace UI
     void Box::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
     {
         SDL_FRect rectangle{
-            static_cast<float>(getBounds().x),
-            static_cast<float>(getBounds().y),
-            static_cast<float>(getBounds().w),
-            static_cast<float>(getBounds().h)};
+            getBounds().x,
+            getBounds().y,
+            getBounds().w,
+            getBounds().h};
         SDL_SetRenderDrawColor(
             renderer,
             style.backgroundColor.x,
@@ -39,28 +39,28 @@ namespace UI
         }
     };
 
-    void Box::layoutChildrenEvenly(int i, int j, int startingX, int startingY, int availableWidth)
+    void Box::layoutChildrenEvenly(int i, int j, float startingX, float startingY, float availableWidth)
     {
         size_t rowChildrenCount = j - i;
-        int widthPerChildren = availableWidth / rowChildrenCount;
+        float widthPerChildren = availableWidth / rowChildrenCount;
         for (int k{i}; k < j; k++)
         {
             auto &rowChild = children.at(k);
             // We re-set the x coordinate, and width
             // whilst keeping the y coordinate, and height the same
-            rowChild->setBounds({static_cast<int>(startingX + widthPerChildren * (k - i)),
+            rowChild->setBounds({startingX + widthPerChildren * (k - i),
                                  startingY,
                                  widthPerChildren,
                                  rowChild->getBounds().h});
         }
     }
 
-    void Box::measure(TextManager *textManager, int availableWidth, int availableHeight)
+    void Box::measure(TextManager *textManager, float availableWidth, float availableHeight)
     {
-        int startingX{bounds.x + style.paddingX}, startingY{bounds.y + style.paddingY};
+        float startingX{bounds.x + style.paddingX}, startingY{bounds.y + style.paddingY};
         availableWidth -= style.paddingX * 2;
-        int x{startingX}, y{startingY};
-        int rowHeight{0}, totalHeight{0};
+        float x{startingX}, y{startingY};
+        float rowHeight{0}, totalHeight{0};
 
         int begin{0};
 

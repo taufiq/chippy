@@ -16,7 +16,7 @@ namespace UI
         void onMouseMove(float x, float y) override;
         void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) override;
         Text(std::string _value);
-        void measure(TextManager *textManager, int availableWidth, int availableHeight) override;
+        void measure(TextManager *textManager, float availableWidth, float availableHeight) override;
         void setBounds(Bounds _bounds) override;
     };
 }

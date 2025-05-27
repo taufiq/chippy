@@ -8,8 +8,8 @@ namespace UI
     // Figure a way out to preserve it.
     void Canvas::setBounds(Bounds _bounds)
     {
-        int oldSize{bounds.w * bounds.h};
-        int newSize{_bounds.w * _bounds.h};
+        int oldSize{static_cast<int>(bounds.w * bounds.h)};
+        int newSize{static_cast<int>(_bounds.w * _bounds.h)};
 
         std::unique_ptr<Vec4[]> newPixels = std::make_unique<Vec4[]>(newSize);
 
@@ -35,12 +35,12 @@ namespace UI
                                    this->pixels[i].y,
                                    this->pixels[i].z,
                                    this->pixels[i].w);
-            float x{static_cast<float>(i % bounds.w)},
-                y{static_cast<float>(i / bounds.w)};
+            float x{static_cast<float>(i % static_cast<int>(bounds.w))},
+                y{i / bounds.w};
             SDL_RenderPoint(renderer, x + bounds.x, y + bounds.y);
         }
     };
-    void Canvas::measure(TextManager *textManager, int availableWidth, int availableHeight) {
+    void Canvas::measure(TextManager *textManager, float availableWidth, float availableHeight) {
         // setBounds({.x = bounds.x,
         //    .y = bounds.y,
         //    .w = availableWidth,

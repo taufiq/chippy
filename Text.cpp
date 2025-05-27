@@ -25,10 +25,10 @@ namespace UI
             style.textColor.z,
             style.textColor.w);
         SDL_FRect rect{
-            static_cast<float>(getBounds().x),
-            static_cast<float>(getBounds().y),
-            static_cast<float>(getBounds().w),
-            static_cast<float>(getBounds().h),
+            getBounds().x,
+            getBounds().y,
+            getBounds().w,
+            getBounds().h,
         };
         SDL_SetRenderDrawColor(renderer, 0xFF, isMouseOver ? 0xFF : 0, 0, 0xFF);
         SDL_RenderRect(renderer, &rect);
@@ -37,36 +37,39 @@ namespace UI
         case Alignment::LEFT:
             TTF_DrawRendererText(
                 text,
-                static_cast<float>(getBounds().x),
-                static_cast<float>(getBounds().y));
+                getBounds().x,
+                getBounds().y);
             break;
         case Alignment::CENTER:
             TTF_DrawRendererText(
                 text,
-                static_cast<float>((getBounds().w - minimumBoundsForText.w) / 2 + getBounds().x),
-                static_cast<float>(getBounds().y));
+                (getBounds().w - minimumBoundsForText.w) / 2 + getBounds().x,
+                getBounds().y);
             break;
         case Alignment::RIGHT:
             TTF_DrawRendererText(
                 text,
-                static_cast<float>(getBounds().w - minimumBoundsForText.w + getBounds().x),
-                static_cast<float>(getBounds().y));
+                getBounds().w - minimumBoundsForText.w + getBounds().x,
+                getBounds().y);
             break;
         default:
             break;
         }
     };
 
-    void Text::measure(TextManager *textManager, int availableWidth, int availableHeight)
+    void Text::measure(TextManager *textManager, float availableWidth, float availableHeight)
     {
-        TTF_GetStringSizeWrapped(textManager->getFont(), value.c_str(), value.length(), availableWidth, &bounds.w, &bounds.h);
+        int w, h;
+        TTF_GetStringSizeWrapped(textManager->getFont(), value.c_str(), value.length(), availableWidth, &w, &h);
+        bounds.w = w;
+        bounds.h = h;
         minimumBoundsForText.w = bounds.w;
         minimumBoundsForText.h = bounds.h;
     };
 
     void Text::onMouseMove(float x, float y)
     {
-        SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value.c_str(), x, y, static_cast<float>(bounds.x), static_cast<float>(bounds.y), isMouseOver);
+        SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value.c_str(), x, y, bounds.x, bounds.y, isMouseOver);
     }
 
 }

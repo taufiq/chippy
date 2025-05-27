@@ -9,7 +9,7 @@ namespace UI
 {
     struct Bounds
     {
-        int x{}, y{}, w{}, h{};
+        float x{}, y{}, w{}, h{};
     };
     struct Context
     {
@@ -58,7 +58,7 @@ namespace UI
             node->parent = this;
             children.push_back(std::move(node));
         }
-        virtual void measure(TextManager *textManager, int availableWidth, int availableHeight) = 0;
+        virtual void measure(TextManager *textManager, float availableWidth, float availableHeight) = 0;
         virtual ~Node() = default;
     };
 }

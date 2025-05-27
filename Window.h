@@ -62,6 +62,7 @@ private:
 
 public:
     void onMouseMove(float x, float y) override;
+    float scrollY{};
     void setEmulator(Emulator *_emulator) { emulator = _emulator; };
     Emulator *getEmulator() { return emulator; };
     void render(SDL_Renderer *renderer, TextManager *textManager) override;

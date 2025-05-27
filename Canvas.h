@@ -7,7 +7,7 @@ namespace UI
     public:
         std::unique_ptr<Vec4[]> pixels{nullptr};
 
-        Canvas(int w, int h)
+        Canvas(float w, float h)
         {
             Canvas::setBounds({
                 .w = w,
@@ -17,6 +17,6 @@ namespace UI
 
         void setBounds(Bounds _bounds) override;
         void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) override;
-        void measure(TextManager *textManager, int availableWidth, int availableHeight) override;
+        void measure(TextManager *textManager, float availableWidth, float availableHeight) override;
     };
 }

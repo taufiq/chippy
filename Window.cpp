@@ -93,7 +93,7 @@ void Window::run()
     while (gRunning)
     {
         uint64_t now{SDL_GetTicks()};
-        if (now - prevTick < 1000.0 / Constants::kFps)
+        if (now - prevTick < 1000.0 / static_cast<float>(Constants::kFps))
         {
             continue;
         }
@@ -101,15 +101,26 @@ void Window::run()
 
         while (SDL_PollEvent(&pollEvent))
         {
+            float og{pollEvent.wheel.y};
             switch (pollEvent.type)
             {
             case SDL_EventType::SDL_EVENT_QUIT:
                 gRunning = false;
-                break;
+                continue;
             case SDL_EventType::SDL_EVENT_MOUSE_MOTION:
                 onMouseMove(pollEvent.motion.x, pollEvent.motion.y);
+                continue;
+            case SDL_EventType::SDL_EVENT_MOUSE_WHEEL:
+                //  TODO: Implement free scrolling
+                for (float i{2.0f}; i > 0; i -= 0.25f)
+                {
+                    if (pollEvent.wheel.y > 0)
+                        i = -i;
+                    pollEvent.wheel.y += i;
+                    debugPanel.scrollY += pollEvent.wheel.y;
+                }
             default:
-                break;
+                continue;
             }
         }
         uint16_t currentInstruction = emulator.consume();
@@ -332,10 +343,10 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
 {
     std::unique_ptr<UI::Box> box = std::make_unique<UI::Box>();
     box->setLayoutMode(UI::LayoutMode::HORIZONTAL);
-    box->setBounds({0,
-                    0,
-                    this->getWidth(),
-                    this->getHeight()});
+    box->setBounds({static_cast<float>(getOffsetX()),
+                    static_cast<float>(getOffsetY()) + scrollY,
+                    static_cast<float>(this->getWidth()),
+                    static_cast<float>(this->getHeight())});
     box->style.paddingX = 16;
     std::unique_ptr<UI::Box> innerBox{std::make_unique<UI::Box>()};
     for (int i = 0; i < 16; i++)
@@ -344,7 +355,7 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
         std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(registerValue);
         innerBox->addChild(std::move(textBox));
 
-        if (innerBox->getChildren().size() == 3)
+        if (innerBox->getChildren().size() == 2)
         {
             box->addChild(std::move(innerBox));
             innerBox = std::make_unique<UI::Box>();
@@ -359,11 +370,13 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
 
 std::unique_ptr<UI::Node> Emulator::getTree()
 {
-    std::unique_ptr<UI::Canvas> canvas = std::make_unique<UI::Canvas>(Constants::width * Constants::scale, Constants::height * Constants::scale);
-    canvas->setBounds({.x = getOffsetX(),
-                       .y = getOffsetY(),
-                       .w = Constants::width * Constants::scale,
-                       .h = Constants::height * Constants::scale});
+    std::unique_ptr<UI::Canvas> canvas = std::make_unique<UI::Canvas>(
+        static_cast<float>(Constants::width * Constants::scale),
+        static_cast<float>(Constants::height * Constants::scale));
+    canvas->setBounds({.x = static_cast<float>(getOffsetX()),
+                       .y = static_cast<float>(getOffsetY()),
+                       .w = static_cast<float>(Constants::width * Constants::scale),
+                       .h = static_cast<float>(Constants::height * Constants::scale)});
 
     for (int x{0}; x < Constants::width; x++)
     {
