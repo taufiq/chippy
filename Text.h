@@ -2,7 +2,7 @@
 #define TEXT_H
 #include "Node.h"
 #include <string>
-#include "Window.h"
+#include "MainWindow.h"
 
 namespace UI
 {

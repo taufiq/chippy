@@ -23,10 +23,34 @@ public:
     int getOffsetX() { return offsetX; };
     int getOffsetY() { return offsetY; };
     void setOffsetX(int x) { offsetX = x; };
+    void setOffsetY(int y) { offsetY = y; };
     virtual void render(SDL_Renderer *renderer, TextManager *textManager);
     virtual std::unique_ptr<UI::Node> getTree();
     void renderPoint(SDL_Renderer *renderer, int x, int y);
 };
+
+enum class InstructionType
+{
+    CLEAR_SCREEN,
+    JUMP,
+    CALL_SUBROUTINE,
+    RETURN_FROM_SUBROUTINE,
+    JUMP_EQ_REG_VALUE,
+    JUMP_NEQ_REG_VALUE,
+    JUMP_EQ_REG_REG,
+    JUMP_NEQ_REG_REG,
+    SET_REGISTER,
+    ADD_TO_REGISTER,
+    ADD_TO_INDEX,
+    SET_INDEX,
+    DRAW,
+};
+
+typedef struct Instruction
+{
+    InstructionType type;
+    uint16_t opCode{};
+} Instruction;
 
 class Emulator : public Panel
 {
@@ -42,11 +66,11 @@ public:
     void initialize();
     uint16_t stack[16];
     int8_t stackPointer{-1};
-    uint16_t peekCurrentInstruction();
+    uint16_t peekCurrentOpCode();
     void loadFile(std::string_view fileName);
     unsigned char peek(char skip = 0);
-    uint16_t consume();
-    void decode(uint16_t instruction);
+    Instruction consume();
+    void decode(Instruction instruction);
     void clearScreen();
     void render(SDL_Renderer *renderer, TextManager *textManager) override;
     char *getRegisters() { return registers; };
@@ -62,7 +86,7 @@ private:
 
 public:
     void onMouseMove(float x, float y) override;
-    float scrollY{};
+    float scrollY{}, scrollTick{}, initialForce{};
     void setEmulator(Emulator *_emulator) { emulator = _emulator; };
     Emulator *getEmulator() { return emulator; };
     void render(SDL_Renderer *renderer, TextManager *textManager) override;

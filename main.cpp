@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <string_view>
 #include "constants.h"
-#include "Window.h"
+#include "MainWindow.h"
 
 TextManager gTextManager{};
 Window gWindow{&gTextManager};

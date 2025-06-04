@@ -20,10 +20,7 @@ set(SDLTTF_VENDORED ON)
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
 
-add_executable(chippy main.cpp Window.cpp Box.cpp Text.cpp TextManager.cpp Canvas.cpp)
-
-set(PROGRAM_PERMISSIONS_DEFAULT
-    OWNER_WRITE OWNER_READ OWNER_EXECUTE)
+add_executable(chippy main.cpp Node.cpp MainWindow.cpp Box.cpp Text.cpp TextManager.cpp Canvas.cpp)
 
 # Ensure debug information is included
 set_target_properties(chippy PROPERTIES

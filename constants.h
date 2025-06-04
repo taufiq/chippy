@@ -10,5 +10,6 @@ namespace Constants
     constexpr int kDebugPanelWidth{200};
     constexpr int kDebugPanelHeight{height * scale};
     constexpr int kFps{30};
+    constexpr int kMouseSensitivity{2};
 }
 #endif

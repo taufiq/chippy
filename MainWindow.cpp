@@ -1,4 +1,5 @@
-#include "Window.h"
+#include <math.h>
+#include "MainWindow.h"
 #include "Canvas.h"
 #include "Box.h"
 #include "Text.h"
@@ -64,6 +65,15 @@ void Window::initialize()
 
 void Window::render(SDL_Renderer *renderer)
 {
+    float result{};
+    if (debugPanel.initialForce != 0)
+    {
+        // debugPanel.initialForce -= debugPanel.initialForce / 10;
+        auto roundingFunction = debugPanel.initialForce >= 0 ? std::floorf : std::ceilf;
+        debugPanel.initialForce = roundingFunction(debugPanel.initialForce * 10) / 11.0f;
+        debugPanel.scrollY += debugPanel.initialForce;
+    }
+
     for (auto panel : panels)
     {
         panel->render(renderer, textManager);
@@ -101,7 +111,8 @@ void Window::run()
 
         while (SDL_PollEvent(&pollEvent))
         {
-            float og{pollEvent.wheel.y};
+            // auto initialForce = pollEvent.wheel.y;
+            // auto acceleration = -pollEvent.wheel.y;
             switch (pollEvent.type)
             {
             case SDL_EventType::SDL_EVENT_QUIT:
@@ -111,19 +122,12 @@ void Window::run()
                 onMouseMove(pollEvent.motion.x, pollEvent.motion.y);
                 continue;
             case SDL_EventType::SDL_EVENT_MOUSE_WHEEL:
-                //  TODO: Implement free scrolling
-                for (float i{2.0f}; i > 0; i -= 0.25f)
-                {
-                    if (pollEvent.wheel.y > 0)
-                        i = -i;
-                    pollEvent.wheel.y += i;
-                    debugPanel.scrollY += pollEvent.wheel.y;
-                }
+                debugPanel.initialForce = Constants::kMouseSensitivity * pollEvent.wheel.y;
             default:
                 continue;
             }
         }
-        uint16_t currentInstruction = emulator.consume();
+        Instruction currentInstruction = emulator.consume();
         SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
         SDL_RenderClear(gRenderer);
         emulator.decode(currentInstruction);
@@ -151,10 +155,10 @@ void Emulator::initialize()
     loadFile("roms/chipper.ch8");
 }
 
-uint16_t Emulator::peekCurrentInstruction()
+uint16_t Emulator::peekCurrentOpCode()
 {
-    uint16_t instruction{static_cast<uint16_t>((peek() << 8) | peek(1))};
-    return instruction;
+    uint16_t opCode{static_cast<uint16_t>((peek() << 8) | peek(1))};
+    return opCode;
 }
 
 void Emulator::loadFile(std::string_view fileName)
@@ -168,59 +172,112 @@ unsigned char Emulator::peek(char skip)
     return ram[programCounter + skip];
 }
 
-uint16_t Emulator::consume()
+Instruction Emulator::consume()
 {
-    uint16_t currentInstruction = peekCurrentInstruction();
+    uint16_t opCode = peekCurrentOpCode();
     programCounter += 2;
-    return currentInstruction;
-}
-
-void Emulator::decode(uint16_t instruction)
-{
-    SDL_Log("Current instruction: %x\n", instruction);
-    unsigned char firstNibble{static_cast<unsigned char>((instruction & 0xF000) >> 12)},
-        secondNibble{static_cast<unsigned char>((instruction & 0x0F00) >> 8)},
-        thirdNibble{static_cast<unsigned char>((instruction & 0x00F0) >> 4)},
-        fourthNibble{static_cast<unsigned char>(0x000F & instruction)};
-    char previousValue = registers[secondNibble];
-
-    switch (instruction)
+    unsigned char firstNibble{static_cast<unsigned char>((opCode & 0xF000) >> 12)},
+        secondNibble{static_cast<unsigned char>((opCode & 0x0F00) >> 8)},
+        thirdNibble{static_cast<unsigned char>((opCode & 0x00F0) >> 4)},
+        fourthNibble{static_cast<unsigned char>(0x000F & opCode)};
+    InstructionType type{};
+    switch (opCode)
     {
     case 0x00E0:
-        clearScreen();
-        return;
+        type = InstructionType::CLEAR_SCREEN;
+        break;
     case 0x00EE:
-        SDL_Log("Jump to: %x\n", stack[stackPointer]);
-        programCounter = stack[stackPointer--];
+        type = InstructionType::RETURN_FROM_SUBROUTINE;
         break;
     default:
         break;
     }
-
     switch (firstNibble)
     {
     case 0x1:
-        programCounter = instruction & 0x0FFF;
-        SDL_Log("Jump to: %x\n", programCounter);
+        type = InstructionType::JUMP;
         break;
     case 0x2:
-        stack[++stackPointer] = programCounter;
-        SDL_Log("jump to: %x\n", instruction & 0x0FFF);
-        programCounter = instruction & 0x0FFF;
+        type = InstructionType::CALL_SUBROUTINE;
         break;
     case 0x6:
-        registers[secondNibble] = instruction & 0x00FF;
-        SDL_Log("Setting register V%x to %x\n", secondNibble, registers[secondNibble]);
+        type = InstructionType::SET_REGISTER;
         break;
     case 0x7:
-        registers[secondNibble] += instruction & 0x00FF;
-        SDL_Log("Adding register V%x from %x to %x\n", secondNibble, previousValue, registers[secondNibble]);
+        type = InstructionType::ADD_TO_REGISTER;
         break;
     case 0xA:
-        indexRegister = instruction & 0x0FFF;
-        SDL_Log("Setting index register to %x\n", indexRegister);
+        type = InstructionType::SET_INDEX;
         break;
     case 0xD:
+        type = InstructionType::DRAW;
+        break;
+    case 0x3:
+        type = InstructionType::JUMP_EQ_REG_VALUE;
+        break;
+    case 0x4:
+        type = InstructionType::JUMP_NEQ_REG_VALUE;
+        break;
+    case 0x5:
+        type = InstructionType::JUMP_EQ_REG_REG;
+        break;
+    case 0x9:
+        type = InstructionType::JUMP_NEQ_REG_REG;
+        break;
+    case 0xF:
+        if ((opCode & 0x00FF) == 0x001E)
+        {
+            type = InstructionType::ADD_TO_INDEX;
+        }
+        break;
+    default:
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Unhandled Instruction: %x", opCode);
+        break;
+    }
+    return Instruction{type, opCode};
+}
+
+void Emulator::decode(Instruction instruction)
+{
+    SDL_Log("Current instruction: %x\n", instruction.opCode);
+    uint16_t opCode = instruction.opCode;
+    unsigned char firstNibble{static_cast<unsigned char>((opCode & 0xF000) >> 12)},
+        secondNibble{static_cast<unsigned char>((opCode & 0x0F00) >> 8)},
+        thirdNibble{static_cast<unsigned char>((opCode & 0x00F0) >> 4)},
+        fourthNibble{static_cast<unsigned char>(0x000F & opCode)};
+    char previousValue = registers[secondNibble];
+
+    switch (instruction.type)
+    {
+    case InstructionType::CLEAR_SCREEN:
+        clearScreen();
+        return;
+    case InstructionType::RETURN_FROM_SUBROUTINE:
+        SDL_Log("Jump to: %x\n", stack[stackPointer]);
+        programCounter = stack[stackPointer--];
+        break;
+    case InstructionType::JUMP:
+        programCounter = opCode & 0x0FFF;
+        SDL_Log("Jump to: %x\n", programCounter);
+        break;
+    case InstructionType::CALL_SUBROUTINE:
+        stack[++stackPointer] = programCounter;
+        SDL_Log("jump to: %x\n", opCode & 0x0FFF);
+        programCounter = opCode & 0x0FFF;
+        break;
+    case InstructionType::SET_REGISTER:
+        registers[secondNibble] = opCode & 0x00FF;
+        SDL_Log("Setting register V%x to %x\n", secondNibble, registers[secondNibble]);
+        break;
+    case InstructionType::ADD_TO_REGISTER:
+        registers[secondNibble] += opCode & 0x00FF;
+        SDL_Log("Adding register V%x from %x to %x\n", secondNibble, previousValue, registers[secondNibble]);
+        break;
+    case InstructionType::SET_INDEX:
+        indexRegister = opCode & 0x0FFF;
+        SDL_Log("Setting index register to %x\n", indexRegister);
+        break;
+    case InstructionType::DRAW:
         SDL_Log("Draw X->V%d:%x\n\tY->V%d:%x", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
         SDL_Log("\n%d Sprites Tall\n", fourthNibble);
         for (unsigned char i = 0; i < fourthNibble; i++)
@@ -233,28 +290,28 @@ void Emulator::decode(uint16_t instruction)
             }
         }
         break;
-    case 0x3:
-        if (registers[secondNibble] == (0x00FF & instruction))
+    case InstructionType::JUMP_EQ_REG_VALUE:
+        if (registers[secondNibble] == (0x00FF & opCode))
         {
-            SDL_Log("Checking if V%d=[%x] == %x: Yes.. Skipping", secondNibble, registers[secondNibble], (0x00FF & instruction));
+            SDL_Log("Checking if V%d=[%x] == %x: Yes.. Skipping", secondNibble, registers[secondNibble], (0x00FF & opCode));
             programCounter += 2;
         }
         else
         {
-            SDL_Log("Checking if V%d=[%x] == %x: No.. Not Skipping", secondNibble, registers[secondNibble], (0x00FF & instruction));
+            SDL_Log("Checking if V%d=[%x] == %x: No.. Not Skipping", secondNibble, registers[secondNibble], (0x00FF & opCode));
         }
-    case 0x4:
-        if (registers[secondNibble] != (0x00FF & instruction))
+    case InstructionType::JUMP_NEQ_REG_VALUE:
+        if (registers[secondNibble] != (0x00FF & opCode))
         {
-            SDL_Log("Checking if V%d=[%x] != %x Yes.. Skipping", secondNibble, registers[secondNibble], (0x00FF & instruction));
+            SDL_Log("Checking if V%d=[%x] != %x Yes.. Skipping", secondNibble, registers[secondNibble], (0x00FF & opCode));
             programCounter += 2;
         }
         else
         {
-            SDL_Log("Checking if V%d=[%x] != %x No.. Not Skipping", secondNibble, registers[secondNibble], (0x00FF & instruction));
+            SDL_Log("Checking if V%d=[%x] != %x No.. Not Skipping", secondNibble, registers[secondNibble], (0x00FF & opCode));
         }
         break;
-    case 0x5:
+    case InstructionType::JUMP_EQ_REG_REG:
         if (registers[secondNibble] == registers[thirdNibble])
         {
             SDL_Log("Checking if V%d=[%x] == V%d=[%x] Yes.. Skipping", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
@@ -265,7 +322,7 @@ void Emulator::decode(uint16_t instruction)
             SDL_Log("Checking if V%d=[%x] == V%d=[%x] No.. Not Skipping", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
         }
         break;
-    case 0x9:
+    case InstructionType::JUMP_NEQ_REG_REG:
         if (registers[secondNibble] != registers[thirdNibble])
         {
             SDL_Log("Checking if V%d=[%x] != V%d=[%x] Yes.. Skipping", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
@@ -276,14 +333,14 @@ void Emulator::decode(uint16_t instruction)
             SDL_Log("Checking if V%d=[%x] != V%d=[%x] No.. Not Skipping", secondNibble, registers[secondNibble], thirdNibble, registers[thirdNibble]);
         }
         break;
-    case 0xF:
-        if ((instruction & 0x00FF) == 0x001E)
+    case InstructionType::ADD_TO_INDEX:
+        if ((opCode & 0x00FF) == 0x001E)
         {
             indexRegister += registers[secondNibble];
         }
         break;
     default:
-        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Unhandled Instruction: %x", instruction);
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Unhandled Instruction: %x", opCode);
         break;
     }
 }
@@ -365,6 +422,8 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
     {
         box->addChild(std::move(innerBox));
     }
+
+    // box->addChild(std::make_unique<UI::Text>(""));
     return box;
 }
 
