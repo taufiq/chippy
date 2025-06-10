@@ -5,18 +5,23 @@
 
 namespace UI
 {
+    // Recursively set relPos
     void Box::setBounds(Bounds _bounds)
     {
-        float dX{_bounds.x - bounds.x}, dY{_bounds.y - bounds.y};
-        for (auto &child : children)
-        {
-            // We recursively offset child elements with the new position shift
-            Bounds childBounds{child->getBounds()};
-            child->setBounds({childBounds.x + dX,
-                              childBounds.y + dY,
-                              childBounds.w,
-                              childBounds.h});
-        }
+        // I don't have to override and recursively set
+        // Cause now I'm calling measure every loop
+        // So it takes n iterations to do this recursive process automatically
+
+        // float dX{_bounds.x - bounds.x}, dY{_bounds.y - bounds.y};
+        // for (auto &child : children)
+        // {
+        //     // We recursively offset child elements with the new position shift
+        //     Bounds childBounds{child->getBounds()};
+        //     child->setBounds({childBounds.x + dX,
+        //                       childBounds.y + dY,
+        //                       childBounds.w,
+        //                       childBounds.h});
+        // }
         Node::setBounds(_bounds);
     }
     void Box::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
@@ -57,14 +62,14 @@ namespace UI
 
     void Box::measure(TextManager *textManager, float availableWidth, float availableHeight)
     {
-        float startingX{bounds.x + style.paddingX}, startingY{bounds.y + style.paddingY};
+        float startingX{bounds.x}, startingY{bounds.y};
         availableWidth -= style.paddingX * 2;
-        float x{startingX}, y{startingY};
+        float x{startingX + style.paddingX}, y{startingY + style.paddingX};
         float rowHeight{0}, totalHeight{0};
 
         int begin{0};
 
-        setBounds({x, y, availableWidth, getBounds().h});
+        setBounds({startingX, startingY, availableWidth, getBounds().h});
         for (size_t i{0}; i < children.size(); i++)
         {
             auto &child = children.at(i);
@@ -88,8 +93,8 @@ namespace UI
         Box::layoutChildrenEvenly(begin, children.size(), startingX, y, availableWidth);
         totalHeight += rowHeight;
         setBounds({
-            getBounds().x,
-            getBounds().y,
+            startingX,
+            startingY,
             getBounds().w,
             totalHeight,
         });

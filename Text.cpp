@@ -4,7 +4,7 @@
 
 namespace UI
 {
-    Text::Text(std::string _value) : value{_value}
+    Text::Text(std::function<std::string()> _value) : value{_value}
     {
         style.paddingX = 4;
         style.paddingY = 2;
@@ -17,7 +17,7 @@ namespace UI
 
     void Text::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
     {
-        TTF_Text *text = textManager->createText(value);
+        TTF_Text *text = textManager->createText(value());
         TTF_SetTextColor(
             text,
             style.textColor.x,
@@ -60,7 +60,7 @@ namespace UI
     void Text::measure(TextManager *textManager, float availableWidth, float availableHeight)
     {
         int w, h;
-        TTF_GetStringSizeWrapped(textManager->getFont(), value.c_str(), value.length(), availableWidth, &w, &h);
+        TTF_GetStringSizeWrapped(textManager->getFont(), value().c_str(), value().length(), availableWidth, &w, &h);
         bounds.w = w;
         bounds.h = h;
         minimumBoundsForText.w = bounds.w;
@@ -69,7 +69,7 @@ namespace UI
 
     void Text::onMouseMove(float x, float y)
     {
-        SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value.c_str(), x, y, bounds.x, bounds.y, isMouseOver);
+        // SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value.c_str(), x, y, bounds.x, bounds.y, isMouseOver);
     }
 
 }

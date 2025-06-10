@@ -14,6 +14,7 @@ class Panel
 {
 private:
     int w{}, h{}, offsetX{}, offsetY{};
+    UI::Node *prevTree{nullptr};
 
 public:
     virtual void onMouseMove(float x, float y);
@@ -25,7 +26,7 @@ public:
     void setOffsetX(int x) { offsetX = x; };
     void setOffsetY(int y) { offsetY = y; };
     virtual void render(SDL_Renderer *renderer, TextManager *textManager);
-    virtual std::unique_ptr<UI::Node> getTree();
+    virtual std::shared_ptr<UI::Node> getTree();
     void renderPoint(SDL_Renderer *renderer, int x, int y);
 };
 
@@ -58,6 +59,7 @@ public:
     uint16_t programCounter{512};
     char *ram{new char[4096]};
     char registers[16];
+    Instruction currentInstruction{};
     uint16_t indexRegister{0};
     char emulatorDisplay[Constants::width * Constants::height];
     SDL_Window *gWindow{nullptr};
@@ -74,8 +76,15 @@ public:
     void clearScreen();
     void render(SDL_Renderer *renderer, TextManager *textManager) override;
     char *getRegisters() { return registers; };
-    std::unique_ptr<UI::Node> getTree() override;
+    std::shared_ptr<UI::Node> getTree() override;
     Emulator(int w, int h) : Panel(w, h) {};
+};
+
+class Spinner : public UI::Node
+{
+public:
+    void render(SDL_Renderer *renderer, TextManager *textManager, UI::Context *ctx) override;
+    void measure(TextManager *textManager, float availableWidth, float availableHeight) override;
 };
 
 class DebugPanel : public Panel
@@ -90,7 +99,7 @@ public:
     void setEmulator(Emulator *_emulator) { emulator = _emulator; };
     Emulator *getEmulator() { return emulator; };
     void render(SDL_Renderer *renderer, TextManager *textManager) override;
-    std::unique_ptr<UI::Node> getTree() override;
+    std::shared_ptr<UI::Node> getTree() override;
     DebugPanel(int w, int h) : Panel(w, h) {};
 };
 

@@ -12,8 +12,12 @@ namespace UI
                 y <= static_cast<float>(child->bounds.y + child->bounds.h))
             {
                 child->isMouseOver = true;
-                child->onMouseMove(x, y);
             }
+            else
+            {
+                child->isMouseOver = false;
+            }
+            child->onMouseMove(x, y);
         }
     }
 }

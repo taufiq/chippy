@@ -52,6 +52,20 @@ namespace UI
             bounds = _bounds;
         };
 
+        void setBoundsRecursive(Bounds _bounds)
+        {
+            float dX{_bounds.x - bounds.x}, dY{_bounds.y - bounds.y};
+            for (auto &child : children)
+            {
+                // We recursively offset child elements with the new position shift
+                Bounds childBounds{child->getBounds()};
+                child->setBoundsRecursive({childBounds.x + dX,
+                                           childBounds.y + dY,
+                                           childBounds.w,
+                                           childBounds.h});
+            }
+            Node::setBounds(_bounds);
+        }
         Bounds &getBounds() { return bounds; };
         void addChild(std::unique_ptr<Node> node)
         {

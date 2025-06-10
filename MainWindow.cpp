@@ -68,9 +68,8 @@ void Window::render(SDL_Renderer *renderer)
     float result{};
     if (debugPanel.initialForce != 0)
     {
-        // debugPanel.initialForce -= debugPanel.initialForce / 10;
         auto roundingFunction = debugPanel.initialForce >= 0 ? std::floorf : std::ceilf;
-        debugPanel.initialForce = roundingFunction(debugPanel.initialForce * 10) / 11.0f;
+        debugPanel.initialForce = roundingFunction(debugPanel.initialForce * 10) / 11.4f;
         debugPanel.scrollY += debugPanel.initialForce;
     }
 
@@ -128,6 +127,7 @@ void Window::run()
             }
         }
         Instruction currentInstruction = emulator.consume();
+        emulator.currentInstruction = currentInstruction;
         SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
         SDL_RenderClear(gRenderer);
         emulator.decode(currentInstruction);
@@ -358,7 +358,7 @@ void Emulator::clearScreen()
 
 void Emulator::render(SDL_Renderer *renderer, TextManager *textManager)
 {
-    std::unique_ptr<UI::Node> treeToRender = getTree();
+    std::shared_ptr<UI::Node> treeToRender = getTree();
     UI::Context ctx{};
     treeToRender->measure(textManager, this->getWidth(), this->getHeight());
     treeToRender->render(renderer, textManager, &ctx);
@@ -388,31 +388,58 @@ void Window::addPanel(Panel *panel)
 
 void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
 {
-    std::unique_ptr<UI::Node> treeToRender = getTree();
+    static std::shared_ptr<UI::Node> tree{nullptr};
+    if (!tree)
+    {
+        tree = getTree();
+    }
+    // 2. How to craft the measure function to save information
+    tree->measure(textManager, this->getWidth(), this->getHeight());
     UI::Context ctx{};
-    treeToRender->measure(textManager, this->getWidth(), this->getHeight());
     // TODO: Terrible way of handling, maybe should convert DebugPanel into a UI element as well.
-    treeToRender->onMouseMove(mouseCoordinates.first, mouseCoordinates.second);
-    treeToRender->render(renderer, textManager, &ctx);
+    tree->onMouseMove(mouseCoordinates.first, mouseCoordinates.second);
+    tree->render(renderer, textManager, &ctx);
 }
 
-std::unique_ptr<UI::Node> DebugPanel::getTree()
+/**
+ * RegisterText {
+ *  int index;
+ *  std::string_view getString() {
+ *      return string;
+ *  }
+ * }
+ */
+// This recreates the entire UI over and over again
+// Is there a way to separate it?
+// 1. Declare how I want it to look like
+// 2. See if it differs:
+//  a. by state value?
+//  b. by children?
+
+std::shared_ptr<UI::Node> DebugPanel::getTree()
 {
-    std::unique_ptr<UI::Box> box = std::make_unique<UI::Box>();
+    std::shared_ptr<UI::Box> box = std::make_shared<UI::Box>();
+
     box->setLayoutMode(UI::LayoutMode::HORIZONTAL);
     box->setBounds({static_cast<float>(getOffsetX()),
-                    static_cast<float>(getOffsetY()) + scrollY,
-                    static_cast<float>(this->getWidth()),
-                    static_cast<float>(this->getHeight())});
+                    static_cast<float>(getOffsetY()),
+                    0.0f,
+                    0.0f});
     box->style.paddingX = 16;
     std::unique_ptr<UI::Box> innerBox{std::make_unique<UI::Box>()};
+
     for (int i = 0; i < 16; i++)
     {
-        std::string registerValue{"V" + std::to_string(i) + ": " + std::to_string(static_cast<int>(this->getEmulator()->registers[i]))};
-        std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(registerValue);
+        std::string registerValue{};
+        // bind Text(text, format, value)
+        // textBox.bind(this->getEmulator()->registers[i], std::format("V{}: \{\}", i));
+        // Pass in address of string?
+        // Pass in a new type that when I call get
+        std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>([this, i]()
+                                                                       { return std::format("V{}: {}", i, static_cast<int>(this->getEmulator()->registers[i])); });
         innerBox->addChild(std::move(textBox));
 
-        if (innerBox->getChildren().size() == 2)
+        if (innerBox->getChildren().size() == 3)
         {
             box->addChild(std::move(innerBox));
             innerBox = std::make_unique<UI::Box>();
@@ -422,14 +449,17 @@ std::unique_ptr<UI::Node> DebugPanel::getTree()
     {
         box->addChild(std::move(innerBox));
     }
+    std::unique_ptr<UI::Text> instructionText = std::make_unique<UI::Text>(
+        [this]()
+        { return std::format("{:x}", this->getEmulator()->currentInstruction.opCode); });
+    box->addChild(std::move(instructionText));
 
-    // box->addChild(std::make_unique<UI::Text>(""));
     return box;
 }
 
-std::unique_ptr<UI::Node> Emulator::getTree()
+std::shared_ptr<UI::Node> Emulator::getTree()
 {
-    std::unique_ptr<UI::Canvas> canvas = std::make_unique<UI::Canvas>(
+    std::shared_ptr<UI::Canvas> canvas = std::make_shared<UI::Canvas>(
         static_cast<float>(Constants::width * Constants::scale),
         static_cast<float>(Constants::height * Constants::scale));
     canvas->setBounds({.x = static_cast<float>(getOffsetX()),
@@ -469,7 +499,7 @@ void DebugPanel::onMouseMove(float x, float y)
     mouseCoordinates = std::make_pair(x, y);
 };
 
-std::unique_ptr<UI::Node> Panel::getTree()
+std::shared_ptr<UI::Node> Panel::getTree()
 {
 }
 
