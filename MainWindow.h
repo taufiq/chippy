@@ -27,6 +27,7 @@ public:
     void setOffsetY(int y) { offsetY = y; };
     virtual void render(SDL_Renderer *renderer, TextManager *textManager);
     virtual std::shared_ptr<UI::Node> getTree();
+    virtual void handleScroll(SDL_MouseWheelEvent event);
     void renderPoint(SDL_Renderer *renderer, int x, int y);
 };
 
@@ -100,6 +101,7 @@ public:
     Emulator *getEmulator() { return emulator; };
     void render(SDL_Renderer *renderer, TextManager *textManager) override;
     std::shared_ptr<UI::Node> getTree() override;
+    void handleScroll(SDL_MouseWheelEvent event) override;
     DebugPanel(int w, int h) : Panel(w, h) {};
 };
 
@@ -120,6 +122,7 @@ public:
     Window(TextManager *_textManager) : textManager{_textManager} {};
     void addPanel(Panel *panel);
     void cleanup();
+    void handleScroll(SDL_MouseWheelEvent event);
     TextManager *getTextManager() { return textManager; };
     int getTotalHeight();
     int getTotalWidth();

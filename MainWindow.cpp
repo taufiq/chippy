@@ -94,6 +94,34 @@ int Window::getTotalHeight()
     return Constants::kScreenHeight;
 }
 
+void Window::handleScroll(SDL_MouseWheelEvent event)
+{
+    for (auto &panel : panels)
+    {
+        if (event.mouse_x >= panel->getOffsetX() && event.mouse_y >= panel->getOffsetY() && event.mouse_x < panel->getOffsetX() + panel->getWidth() && event.mouse_y < panel->getOffsetY() + panel->getHeight())
+        {
+            panel->handleScroll(event);
+        }
+    }
+}
+
+void PrintChildren(std::vector<std::unique_ptr<UI::Node>> &children)
+{
+    SDL_Log("----------");
+    for (auto &child : children)
+    {
+        SDL_Log("x: %f, y: %f, w: %f, h: %f", child->getBounds().x, child->getBounds().y, child->getBounds().w, child->getBounds().h);
+    }
+    SDL_Log("----------");
+}
+void DebugPanel::handleScroll(SDL_MouseWheelEvent event)
+{
+    auto tree = getTree();
+    tree->handleScroll(event);
+}
+
+void Panel::handleScroll(SDL_MouseWheelEvent event) {}
+
 void Window::run()
 {
     uint64_t prevTick = 0;
@@ -110,8 +138,6 @@ void Window::run()
 
         while (SDL_PollEvent(&pollEvent))
         {
-            // auto initialForce = pollEvent.wheel.y;
-            // auto acceleration = -pollEvent.wheel.y;
             switch (pollEvent.type)
             {
             case SDL_EventType::SDL_EVENT_QUIT:
@@ -121,7 +147,8 @@ void Window::run()
                 onMouseMove(pollEvent.motion.x, pollEvent.motion.y);
                 continue;
             case SDL_EventType::SDL_EVENT_MOUSE_WHEEL:
-                debugPanel.initialForce = Constants::kMouseSensitivity * pollEvent.wheel.y;
+                handleScroll(pollEvent.wheel);
+                continue;
             default:
                 continue;
             }
@@ -359,7 +386,7 @@ void Emulator::clearScreen()
 void Emulator::render(SDL_Renderer *renderer, TextManager *textManager)
 {
     std::shared_ptr<UI::Node> treeToRender = getTree();
-    UI::Context ctx{};
+    static UI::Context ctx{};
     treeToRender->measure(textManager, this->getWidth(), this->getHeight());
     treeToRender->render(renderer, textManager, &ctx);
 }
@@ -388,37 +415,25 @@ void Window::addPanel(Panel *panel)
 
 void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
 {
-    static std::shared_ptr<UI::Node> tree{nullptr};
-    if (!tree)
-    {
-        tree = getTree();
-    }
+    static UI::Context ctx{};
+    std::shared_ptr<UI::Node> tree = getTree();
     // 2. How to craft the measure function to save information
     tree->measure(textManager, this->getWidth(), this->getHeight());
-    UI::Context ctx{};
     // TODO: Terrible way of handling, maybe should convert DebugPanel into a UI element as well.
     tree->onMouseMove(mouseCoordinates.first, mouseCoordinates.second);
     tree->render(renderer, textManager, &ctx);
 }
 
-/**
- * RegisterText {
- *  int index;
- *  std::string_view getString() {
- *      return string;
- *  }
- * }
- */
-// This recreates the entire UI over and over again
-// Is there a way to separate it?
-// 1. Declare how I want it to look like
-// 2. See if it differs:
-//  a. by state value?
-//  b. by children?
-
 std::shared_ptr<UI::Node> DebugPanel::getTree()
 {
+    static std::shared_ptr<UI::Node> tree{nullptr};
+    if (tree)
+    {
+        return tree;
+    }
+
     std::shared_ptr<UI::Box> box = std::make_shared<UI::Box>();
+    tree = box;
 
     box->setLayoutMode(UI::LayoutMode::HORIZONTAL);
     box->setBounds({static_cast<float>(getOffsetX()),
@@ -426,20 +441,11 @@ std::shared_ptr<UI::Node> DebugPanel::getTree()
                     0.0f,
                     0.0f});
     box->style.paddingX = 16;
+    box->scrollable = true;
     std::unique_ptr<UI::Box> innerBox{std::make_unique<UI::Box>()};
 
     for (int i = 0; i < 16; i++)
     {
-        std::string registerValue{};
-        // IDEA DUMP:
-        // bind Text(text, format, value)
-        // textBox.bind(this->getEmulator()->registers[i], std::format("V{}: \{\}", i));
-        // Pass in address of string?
-        // Pass in a new type that when I call get
-
-        // Currently creating a memoized lambda function
-        // By capturing the prev result in `resultString`
-        //
         char prevRegisterValue{127};
         std::string resultRegisterText{""};
         std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(

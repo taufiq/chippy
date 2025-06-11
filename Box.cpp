@@ -26,9 +26,12 @@ namespace UI
     }
     void Box::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
     {
+        auto roundingFunction = scrollForce.y >= 0 ? std::floorf : std::ceilf;
+        scrollForce.y = roundingFunction(scrollForce.y * 10) / 11.4f;
+        ctx->offset.y += scrollForce.y;
         SDL_FRect rectangle{
             getBounds().x,
-            getBounds().y,
+            getBounds().y + ctx->offset.y,
             getBounds().w,
             getBounds().h};
         SDL_SetRenderDrawColor(
