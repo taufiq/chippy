@@ -431,12 +431,27 @@ std::shared_ptr<UI::Node> DebugPanel::getTree()
     for (int i = 0; i < 16; i++)
     {
         std::string registerValue{};
+        // IDEA DUMP:
         // bind Text(text, format, value)
         // textBox.bind(this->getEmulator()->registers[i], std::format("V{}: \{\}", i));
         // Pass in address of string?
         // Pass in a new type that when I call get
-        std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>([this, i]()
-                                                                       { return std::format("V{}: {}", i, static_cast<int>(this->getEmulator()->registers[i])); });
+
+        // Currently creating a memoized lambda function
+        // By capturing the prev result in `resultString`
+        //
+        char prevRegisterValue{127};
+        std::string resultRegisterText{""};
+        std::unique_ptr<UI::Text> textBox = std::make_unique<UI::Text>(
+            [this, i, prevRegisterValue, resultRegisterText]() mutable
+            {
+                if (this->getEmulator()->registers[i] != prevRegisterValue)
+                {
+                    prevRegisterValue = this->getEmulator()->registers[i];
+                    resultRegisterText = std::format("V{}: {}", i, static_cast<int>(this->getEmulator()->registers[i]));
+                };
+                return resultRegisterText;
+            });
         innerBox->addChild(std::move(textBox));
 
         if (innerBox->getChildren().size() == 3)
