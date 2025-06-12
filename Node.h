@@ -5,6 +5,15 @@
 #include "TextManager.h"
 #include "Vec.h"
 
+/**
+ * Okay now only information is being known to the render function of the Node
+ * Node has no idea of whether it's being hovered over or not.
+ * Right now I have a `scrollForce` that keeps the <(x)offset, (y)scrollForce> in each Node
+ * `scrollForce.x` stores the offset relative to the parent, and we propagate the `ctx` down
+ * during render.
+ *
+ * onMouseMove handler is unaware of the offset in render, so it's giving the wrong value
+ */
 namespace UI
 {
     struct Bounds
@@ -13,8 +22,8 @@ namespace UI
     };
     struct Context
     {
-        [[maybe_unused]] UI::Bounds parentBounds{}, additionalBounds{};
         Vec2f offset{};
+        Vec2f mousePos{};
     };
     enum class Alignment
     {
@@ -51,7 +60,7 @@ namespace UI
         Style style{};
         virtual void handleScroll(SDL_MouseWheelEvent event);
         virtual void onMouseMove(float x, float y);
-        virtual void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) = 0;
+        virtual void render(SDL_Renderer *renderer, TextManager *textManager, Context ctx) = 0;
         virtual void setBounds(Bounds _bounds)
         {
             bounds = _bounds;

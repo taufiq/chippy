@@ -65,14 +65,6 @@ void Window::initialize()
 
 void Window::render(SDL_Renderer *renderer)
 {
-    float result{};
-    if (debugPanel.initialForce != 0)
-    {
-        auto roundingFunction = debugPanel.initialForce >= 0 ? std::floorf : std::ceilf;
-        debugPanel.initialForce = roundingFunction(debugPanel.initialForce * 10) / 11.4f;
-        debugPanel.scrollY += debugPanel.initialForce;
-    }
-
     for (auto panel : panels)
     {
         panel->render(renderer, textManager);
@@ -386,9 +378,9 @@ void Emulator::clearScreen()
 void Emulator::render(SDL_Renderer *renderer, TextManager *textManager)
 {
     std::shared_ptr<UI::Node> treeToRender = getTree();
-    static UI::Context ctx{};
+    UI::Context ctx{};
     treeToRender->measure(textManager, this->getWidth(), this->getHeight());
-    treeToRender->render(renderer, textManager, &ctx);
+    treeToRender->render(renderer, textManager, ctx);
 }
 
 void Panel::renderPoint(SDL_Renderer *renderer, int x, int y)
@@ -415,13 +407,9 @@ void Window::addPanel(Panel *panel)
 
 void DebugPanel::render(SDL_Renderer *renderer, TextManager *textManager)
 {
-    static UI::Context ctx{};
     std::shared_ptr<UI::Node> tree = getTree();
-    // 2. How to craft the measure function to save information
     tree->measure(textManager, this->getWidth(), this->getHeight());
-    // TODO: Terrible way of handling, maybe should convert DebugPanel into a UI element as well.
-    tree->onMouseMove(mouseCoordinates.first, mouseCoordinates.second);
-    tree->render(renderer, textManager, &ctx);
+    tree->render(renderer, textManager, ctx);
 }
 
 std::shared_ptr<UI::Node> DebugPanel::getTree()
@@ -517,7 +505,7 @@ std::shared_ptr<UI::Node> Emulator::getTree()
 }
 void DebugPanel::onMouseMove(float x, float y)
 {
-    mouseCoordinates = std::make_pair(x, y);
+    getTree()->onMouseMove(x, y);
 };
 
 std::shared_ptr<UI::Node> Panel::getTree()

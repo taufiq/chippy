@@ -15,9 +15,8 @@ namespace UI
         Node::setBounds(_bounds);
     };
 
-    void Text::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
+    void Text::render(SDL_Renderer *renderer, TextManager *textManager, Context ctx)
     {
-        SDL_Log("Text %s: Offset Y: %f", value().c_str(), ctx->offset.y);
         TTF_Text *text = textManager->createText(value());
         TTF_SetTextColor(
             text,
@@ -27,7 +26,7 @@ namespace UI
             style.textColor.w);
         SDL_FRect rect{
             getBounds().x,
-            getBounds().y + ctx->offset.y,
+            getBounds().y + ctx.offset.y,
             getBounds().w,
             getBounds().h,
         };
@@ -39,20 +38,20 @@ namespace UI
             TTF_DrawRendererText(
                 text,
                 getBounds().x,
-                getBounds().y + ctx->offset.y);
+                getBounds().y + ctx.offset.y);
             break;
         case Alignment::CENTER:
             TTF_DrawRendererText(
                 text,
                 (getBounds().w - minimumBoundsForText.w) / 2 + getBounds().x,
                 getBounds().y +
-                    ctx->offset.y);
+                    ctx.offset.y);
             break;
         case Alignment::RIGHT:
             TTF_DrawRendererText(
                 text,
                 getBounds().w - minimumBoundsForText.w + getBounds().x,
-                getBounds().y + ctx->offset.y);
+                getBounds().y + ctx.offset.y);
             break;
         default:
             break;
@@ -71,7 +70,8 @@ namespace UI
 
     void Text::onMouseMove(float x, float y)
     {
-        // SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value.c_str(), x, y, bounds.x, bounds.y, isMouseOver);
+        SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value().c_str(), x, y, bounds.x, bounds.y, isMouseOver);
+        Node::onMouseMove(x, y);
     }
 
 }

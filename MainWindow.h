@@ -84,7 +84,7 @@ public:
 class Spinner : public UI::Node
 {
 public:
-    void render(SDL_Renderer *renderer, TextManager *textManager, UI::Context *ctx) override;
+    void render(SDL_Renderer *renderer, TextManager *textManager, UI::Context ctx) override;
     void measure(TextManager *textManager, float availableWidth, float availableHeight) override;
 };
 
@@ -96,7 +96,7 @@ private:
 
 public:
     void onMouseMove(float x, float y) override;
-    float scrollY{}, scrollTick{}, initialForce{};
+    UI::Context ctx{};
     void setEmulator(Emulator *_emulator) { emulator = _emulator; };
     Emulator *getEmulator() { return emulator; };
     void render(SDL_Renderer *renderer, TextManager *textManager) override;

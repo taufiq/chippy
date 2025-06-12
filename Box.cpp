@@ -24,14 +24,14 @@ namespace UI
         // }
         Node::setBounds(_bounds);
     }
-    void Box::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
+    void Box::render(SDL_Renderer *renderer, TextManager *textManager, Context ctx)
     {
         auto roundingFunction = scrollForce.y >= 0 ? std::floorf : std::ceilf;
         scrollForce.y = roundingFunction(scrollForce.y * 10) / 11.4f;
-        ctx->offset.y += scrollForce.y;
+        scrollForce.x += scrollForce.y;
         SDL_FRect rectangle{
             getBounds().x,
-            getBounds().y + ctx->offset.y,
+            getBounds().y + ctx.offset.y + scrollForce.x,
             getBounds().w,
             getBounds().h};
         SDL_SetRenderDrawColor(
@@ -41,6 +41,8 @@ namespace UI
             style.backgroundColor.z,
             style.backgroundColor.w);
         SDL_RenderFillRect(renderer, &rectangle);
+
+        ctx.offset.y += scrollForce.x;
         for (auto &child : getChildren())
         {
             child->render(renderer, textManager, ctx);

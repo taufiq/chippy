@@ -4,23 +4,26 @@ namespace UI
 {
     void Node::onMouseMove(float x, float y)
     {
+        // yOffset is relative to the parent
+        // mousePos starts absolute
+        // so everytime I enter an element, I check if currentPos is within defined bounds + bounds offset
+        // Then I minus the cursor position when I enter its child
+        if (x >= bounds.x &&
+            x <= bounds.x + bounds.w &&
+            y >= bounds.y + scrollForce.x &&
+            y <= bounds.y + bounds.h + scrollForce.y)
+        {
+            isMouseOver = true;
+        }
+        else
+        {
+            isMouseOver = false;
+        }
         for (auto &child : children)
         {
-            if (x >= static_cast<float>(child->bounds.x) &&
-                x <= static_cast<float>(child->bounds.x + child->bounds.w) &&
-                y >= static_cast<float>(child->bounds.y) &&
-                y <= static_cast<float>(child->bounds.y + child->bounds.h))
-            {
-                child->isMouseOver = true;
-            }
-            else
-            {
-                child->isMouseOver = false;
-            }
-            child->onMouseMove(x, y);
+            child->onMouseMove(x, y - scrollForce.x);
         }
     }
-    // Try to propagate scroll Event down
     void Node::handleScroll(SDL_MouseWheelEvent event)
     {
         float x{event.mouse_x}, y{event.mouse_y};

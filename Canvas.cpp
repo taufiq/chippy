@@ -26,7 +26,7 @@ namespace UI
         Node::setBounds(_bounds);
     }
 
-    void Canvas::render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx)
+    void Canvas::render(SDL_Renderer *renderer, TextManager *textManager, Context ctx)
     {
         for (int i{0}; i < bounds.w * bounds.h; i++)
         {

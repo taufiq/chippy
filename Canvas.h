@@ -16,7 +16,7 @@ namespace UI
         }
 
         void setBounds(Bounds _bounds) override;
-        void render(SDL_Renderer *renderer, TextManager *textManager, Context *ctx) override;
+        void render(SDL_Renderer *renderer, TextManager *textManager, Context ctx) override;
         void measure(TextManager *textManager, float availableWidth, float availableHeight) override;
     };
 }
