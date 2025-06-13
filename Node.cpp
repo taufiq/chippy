@@ -4,6 +4,7 @@ namespace UI
 {
     void Node::onMouseMove(float x, float y)
     {
+        // scroll offset
         y -= scrollForce.x;
 
         if (x >= bounds.x &&
@@ -17,6 +18,10 @@ namespace UI
         {
             isMouseOver = false;
         }
+
+        // relative positioning
+        y -= bounds.y;
+        x -= bounds.x;
         for (auto &child : children)
         {
             child->onMouseMove(x, y);

@@ -377,8 +377,9 @@ void Emulator::clearScreen()
 
 void Emulator::render(SDL_Renderer *renderer, TextManager *textManager)
 {
-    std::shared_ptr<UI::Node> treeToRender = getTree();
     UI::Context ctx{};
+
+    std::shared_ptr<UI::Node> treeToRender = getTree();
     treeToRender->measure(textManager, this->getWidth(), this->getHeight());
     treeToRender->render(renderer, textManager, ctx);
 }

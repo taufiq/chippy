@@ -5,25 +5,6 @@
 
 namespace UI
 {
-    // Recursively set relPos
-    void Box::setBounds(Bounds _bounds)
-    {
-        // I don't have to override and recursively set
-        // Cause now I'm calling measure every loop
-        // So it takes n iterations to do this recursive process automatically
-
-        // float dX{_bounds.x - bounds.x}, dY{_bounds.y - bounds.y};
-        // for (auto &child : children)
-        // {
-        //     // We recursively offset child elements with the new position shift
-        //     Bounds childBounds{child->getBounds()};
-        //     child->setBounds({childBounds.x + dX,
-        //                       childBounds.y + dY,
-        //                       childBounds.w,
-        //                       childBounds.h});
-        // }
-        Node::setBounds(_bounds);
-    }
     void Box::render(SDL_Renderer *renderer, TextManager *textManager, Context ctx)
     {
         auto roundingFunction = scrollForce.y >= 0 ? std::floorf : std::ceilf;
@@ -43,15 +24,23 @@ namespace UI
         SDL_RenderFillRect(renderer, &rectangle);
 
         ctx.offset.y += scrollForce.x;
+        ctx.offset.y += getBounds().y;
+        ctx.offset.x += getBounds().x;
         for (auto &child : getChildren())
         {
             child->render(renderer, textManager, ctx);
         }
     };
 
+    // TODO: make flex-like layout
     void Box::layoutChildrenEvenly(int i, int j, float startingX, float startingY, float availableWidth)
     {
         size_t rowChildrenCount = j - i;
+        int totalFlexGrow{0};
+        for (int k{i}; k < j; k++)
+        {
+            totalFlexGrow += children.at(k)->style.flex;
+        };
         float widthPerChildren = availableWidth / rowChildrenCount;
         for (int k{i}; k < j; k++)
         {
@@ -67,7 +56,7 @@ namespace UI
 
     void Box::measure(TextManager *textManager, float availableWidth, float availableHeight)
     {
-        float startingX{bounds.x}, startingY{bounds.y};
+        float startingX{}, startingY{};
         availableWidth -= style.paddingX * 2;
         float x{startingX + style.paddingX}, y{startingY + style.paddingX};
         float rowHeight{0}, totalHeight{0};

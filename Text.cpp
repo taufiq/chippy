@@ -25,7 +25,7 @@ namespace UI
             style.textColor.z,
             style.textColor.w);
         SDL_FRect rect{
-            getBounds().x,
+            getBounds().x + ctx.offset.x,
             getBounds().y + ctx.offset.y,
             getBounds().w,
             getBounds().h,
