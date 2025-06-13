@@ -68,10 +68,10 @@ namespace UI
         minimumBoundsForText.h = bounds.h;
     };
 
-    void Text::onMouseMove(float x, float y)
-    {
-        SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value().c_str(), x, y, bounds.x, bounds.y, isMouseOver);
-        Node::onMouseMove(x, y);
-    }
+    // void Text::onMouseMove(float x, float y)
+    // {
+    //     // SDL_Log("Mouse in view of Text: %s (%f, %f) text = (%f, %f) %d", value().c_str(), x, y, bounds.x, bounds.y, isMouseOver);
+    //     Node::onMouseMove(x, y);
+    // }
 
 }

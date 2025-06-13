@@ -505,7 +505,8 @@ std::shared_ptr<UI::Node> Emulator::getTree()
 }
 void DebugPanel::onMouseMove(float x, float y)
 {
-    getTree()->onMouseMove(x, y);
+    std::shared_ptr<UI::Node> tree = getTree();
+    tree->onMouseMove(x, y);
 };
 
 std::shared_ptr<UI::Node> Panel::getTree()
