@@ -449,7 +449,7 @@ std::shared_ptr<UI::Node> DebugPanel::getTree()
             });
         innerBox->addChild(std::move(textBox));
 
-        if (innerBox->getChildren().size() == 3)
+        if (innerBox->getChildren().size() == 2)
         {
             box->addChild(std::move(innerBox));
             innerBox = std::make_unique<UI::Box>();

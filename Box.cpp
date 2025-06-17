@@ -32,25 +32,29 @@ namespace UI
         }
     };
 
-    // TODO: make flex-like layout
-    void Box::layoutChildrenEvenly(int i, int j, float startingX, float startingY, float availableWidth)
+    /**
+     * Takes available space in a row and redistributes based
+     * on flex values.
+     */
+    void Box::layoutChildrenEvenly(int i, int j, float availableWidth, float gap)
     {
         size_t rowChildrenCount = j - i;
-        int totalFlexGrow{0};
+        float totalFlexGrow{0};
         for (int k{i}; k < j; k++)
         {
             totalFlexGrow += children.at(k)->style.flex;
         };
-        float widthPerChildren = availableWidth / rowChildrenCount;
+
+        float spacePerChildren = gap / totalFlexGrow;
+        float x{};
         for (int k{i}; k < j; k++)
         {
             auto &rowChild = children.at(k);
-            // We re-set the x coordinate, and width
-            // whilst keeping the y coordinate, and height the same
-            rowChild->setBounds({startingX + widthPerChildren * (k - i),
-                                 startingY,
-                                 widthPerChildren,
+            rowChild->setBounds({x,
+                                 rowChild->getBounds().y,
+                                 rowChild->getBounds().w + (spacePerChildren * rowChild->style.flex),
                                  rowChild->getBounds().h});
+            x = rowChild->getBounds().x + rowChild->getBounds().w;
         }
     }
 
@@ -70,7 +74,7 @@ namespace UI
             child->measure(textManager, availableWidth, availableHeight);
             if (x + child->getBounds().w > availableWidth)
             {
-                Box::layoutChildrenEvenly(begin, i, startingX, y, availableWidth);
+                Box::layoutChildrenEvenly(begin, i, availableWidth, availableWidth - x);
                 x = startingX;
                 y += rowHeight;
                 totalHeight += rowHeight;
@@ -84,7 +88,7 @@ namespace UI
                               child->getBounds().h});
             x += child->getBounds().w;
         }
-        Box::layoutChildrenEvenly(begin, children.size(), startingX, y, availableWidth);
+        Box::layoutChildrenEvenly(begin, children.size(), availableWidth, availableWidth - x);
         totalHeight += rowHeight;
         setBounds({
             startingX,
