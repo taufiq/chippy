@@ -298,6 +298,150 @@ plutosvg/fast:
 	$(MAKE) $(MAKESILENT) -f vendored/SDL_ttf/external/plutosvg-guild/CMakeFiles/plutosvg.dir/build.make vendored/SDL_ttf/external/plutosvg-guild/CMakeFiles/plutosvg.dir/build
 .PHONY : plutosvg/fast
 
+Box.o: Box.cpp.o
+.PHONY : Box.o
+
+# target to build an object file
+Box.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Box.cpp.o
+.PHONY : Box.cpp.o
+
+Box.i: Box.cpp.i
+.PHONY : Box.i
+
+# target to preprocess a source file
+Box.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Box.cpp.i
+.PHONY : Box.cpp.i
+
+Box.s: Box.cpp.s
+.PHONY : Box.s
+
+# target to generate assembly for a file
+Box.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Box.cpp.s
+.PHONY : Box.cpp.s
+
+Canvas.o: Canvas.cpp.o
+.PHONY : Canvas.o
+
+# target to build an object file
+Canvas.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Canvas.cpp.o
+.PHONY : Canvas.cpp.o
+
+Canvas.i: Canvas.cpp.i
+.PHONY : Canvas.i
+
+# target to preprocess a source file
+Canvas.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Canvas.cpp.i
+.PHONY : Canvas.cpp.i
+
+Canvas.s: Canvas.cpp.s
+.PHONY : Canvas.s
+
+# target to generate assembly for a file
+Canvas.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Canvas.cpp.s
+.PHONY : Canvas.cpp.s
+
+MainWindow.o: MainWindow.cpp.o
+.PHONY : MainWindow.o
+
+# target to build an object file
+MainWindow.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/MainWindow.cpp.o
+.PHONY : MainWindow.cpp.o
+
+MainWindow.i: MainWindow.cpp.i
+.PHONY : MainWindow.i
+
+# target to preprocess a source file
+MainWindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/MainWindow.cpp.i
+.PHONY : MainWindow.cpp.i
+
+MainWindow.s: MainWindow.cpp.s
+.PHONY : MainWindow.s
+
+# target to generate assembly for a file
+MainWindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/MainWindow.cpp.s
+.PHONY : MainWindow.cpp.s
+
+Node.o: Node.cpp.o
+.PHONY : Node.o
+
+# target to build an object file
+Node.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Node.cpp.o
+.PHONY : Node.cpp.o
+
+Node.i: Node.cpp.i
+.PHONY : Node.i
+
+# target to preprocess a source file
+Node.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Node.cpp.i
+.PHONY : Node.cpp.i
+
+Node.s: Node.cpp.s
+.PHONY : Node.s
+
+# target to generate assembly for a file
+Node.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Node.cpp.s
+.PHONY : Node.cpp.s
+
+Text.o: Text.cpp.o
+.PHONY : Text.o
+
+# target to build an object file
+Text.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Text.cpp.o
+.PHONY : Text.cpp.o
+
+Text.i: Text.cpp.i
+.PHONY : Text.i
+
+# target to preprocess a source file
+Text.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Text.cpp.i
+.PHONY : Text.cpp.i
+
+Text.s: Text.cpp.s
+.PHONY : Text.s
+
+# target to generate assembly for a file
+Text.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/Text.cpp.s
+.PHONY : Text.cpp.s
+
+TextManager.o: TextManager.cpp.o
+.PHONY : TextManager.o
+
+# target to build an object file
+TextManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/TextManager.cpp.o
+.PHONY : TextManager.cpp.o
+
+TextManager.i: TextManager.cpp.i
+.PHONY : TextManager.i
+
+# target to preprocess a source file
+TextManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/TextManager.cpp.i
+.PHONY : TextManager.cpp.i
+
+TextManager.s: TextManager.cpp.s
+.PHONY : TextManager.s
+
+# target to generate assembly for a file
+TextManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chippy.dir/build.make CMakeFiles/chippy.dir/TextManager.cpp.s
+.PHONY : TextManager.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -345,6 +489,24 @@ help:
 	@echo "... harfbuzz"
 	@echo "... plutosvg"
 	@echo "... plutovg"
+	@echo "... Box.o"
+	@echo "... Box.i"
+	@echo "... Box.s"
+	@echo "... Canvas.o"
+	@echo "... Canvas.i"
+	@echo "... Canvas.s"
+	@echo "... MainWindow.o"
+	@echo "... MainWindow.i"
+	@echo "... MainWindow.s"
+	@echo "... Node.o"
+	@echo "... Node.i"
+	@echo "... Node.s"
+	@echo "... Text.o"
+	@echo "... Text.i"
+	@echo "... Text.s"
+	@echo "... TextManager.o"
+	@echo "... TextManager.i"
+	@echo "... TextManager.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

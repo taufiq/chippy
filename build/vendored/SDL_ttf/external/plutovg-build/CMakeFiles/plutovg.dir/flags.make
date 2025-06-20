@@ -6,9 +6,7 @@ C_DEFINES = -DPLUTOVG_BUILD -DPLUTOVG_BUILD_STATIC
 
 C_INCLUDES = -I/Users/taufiq/Documents/chippy/vendored/SDL_ttf/external/plutovg/include -I/Users/taufiq/Documents/chippy/vendored/SDL_ttf/external/plutovg/source
 
-C_FLAGSarm64 = -std=gnu99 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC -fvisibility=hidden
+C_FLAGSarm64 = -g -g -O0 -std=gnu99 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC -fvisibility=hidden
 
-C_FLAGSx86_64 = -std=gnu99 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC -fvisibility=hidden
-
-C_FLAGS = -std=gnu99 -arch arm64 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC -fvisibility=hidden
+C_FLAGS = -g -g -O0 -std=gnu99 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC -fvisibility=hidden
 

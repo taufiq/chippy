@@ -19,9 +19,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/SDL3_test.dir/src/test/SDL_test_md5.c.o.d"
   "CMakeFiles/SDL3_test.dir/src/test/SDL_test_memory.c.o"
   "CMakeFiles/SDL3_test.dir/src/test/SDL_test_memory.c.o.d"
-  "SDL3_test.framework/SDL3_test"
-  "SDL3_test.framework/SDL3_test.pdb"
-  "SDL3_test.framework/Versions/A/SDL3_test"
+  "libSDL3_test.a"
+  "libSDL3_test.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

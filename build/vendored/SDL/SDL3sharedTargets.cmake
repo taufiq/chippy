@@ -48,7 +48,6 @@ unset(_cmake_expected_targets)
 
 # Create imported target SDL3::SDL3-shared
 add_library(SDL3::SDL3-shared SHARED IMPORTED)
-set_property(TARGET SDL3::SDL3-shared PROPERTY FRAMEWORK 1)
 
 set_target_properties(SDL3::SDL3-shared PROPERTIES
   COMPATIBLE_INTERFACE_BOOL "SDL3_SHARED"
@@ -59,11 +58,11 @@ set_target_properties(SDL3::SDL3-shared PROPERTIES
   INTERFACE_SDL_VERSION "SDL3"
 )
 
-# Import target "SDL3::SDL3-shared" for configuration ""
-set_property(TARGET SDL3::SDL3-shared APPEND PROPERTY IMPORTED_CONFIGURATIONS NOCONFIG)
+# Import target "SDL3::SDL3-shared" for configuration "Debug"
+set_property(TARGET SDL3::SDL3-shared APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(SDL3::SDL3-shared PROPERTIES
-  IMPORTED_LOCATION_NOCONFIG "/Users/taufiq/Documents/chippy/build/SDL3.framework/Versions/A/SDL3"
-  IMPORTED_SONAME_NOCONFIG "@rpath/SDL3.framework/Versions/A/SDL3"
+  IMPORTED_LOCATION_DEBUG "/Users/taufiq/Documents/chippy/build/Debug/libSDL3.0.dylib"
+  IMPORTED_SONAME_DEBUG "@rpath/libSDL3.0.dylib"
   )
 
 # Make sure the targets which have been exported in some other

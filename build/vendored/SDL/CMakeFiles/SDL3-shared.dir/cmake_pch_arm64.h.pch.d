@@ -2,7 +2,7 @@ vendored/SDL/CMakeFiles/SDL3-shared.dir/cmake_pch_arm64.h.pch: \
   /Users/taufiq/Documents/chippy/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/cmake_pch_arm64.h.c \
   /Users/taufiq/Documents/chippy/build/vendored/SDL/CMakeFiles/SDL3-shared.dir/cmake_pch_arm64.h \
   /Users/taufiq/Documents/chippy/vendored/SDL/src/SDL_internal.h \
-  /Users/taufiq/Documents/chippy/build/vendored/SDL/include-config-/build_config/SDL_build_config.h \
+  /Users/taufiq/Documents/chippy/build/vendored/SDL/include-config-debug/build_config/SDL_build_config.h \
   /Users/taufiq/Documents/chippy/vendored/SDL/include/SDL3/SDL_platform_defines.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/usr/include/AvailabilityMacros.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/usr/include/AvailabilityVersions.h \
@@ -231,6 +231,8 @@ vendored/SDL/CMakeFiles/SDL3-shared.dir/cmake_pch_arm64.h.pch: \
   /Users/taufiq/Documents/chippy/vendored/SDL/include/SDL3/SDL_version.h \
   /Users/taufiq/Documents/chippy/vendored/SDL/include/SDL3/SDL_oldnames.h \
   /Users/taufiq/Documents/chippy/vendored/SDL/include/SDL3/SDL_intrin.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include/arm_neon.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include/arm_bf16.h \
   /Users/taufiq/Documents/chippy/vendored/SDL/include/SDL3/SDL_main.h \
   /Users/taufiq/Documents/chippy/vendored/SDL/src/SDL_utils_c.h \
   /Users/taufiq/Documents/chippy/vendored/SDL/src/SDL_hashtable.h

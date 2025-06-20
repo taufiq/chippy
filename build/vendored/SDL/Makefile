@@ -238,21 +238,6 @@ cmake_pch_arm64.h.s:
 	cd /Users/taufiq/Documents/chippy/build && $(MAKE) $(MAKESILENT) -f vendored/SDL/CMakeFiles/SDL3-shared.dir/build.make vendored/SDL/CMakeFiles/SDL3-shared.dir/cmake_pch_arm64.h.s
 .PHONY : cmake_pch_arm64.h.s
 
-# target to build an object file
-cmake_pch_x86_64.h.pch:
-	cd /Users/taufiq/Documents/chippy/build && $(MAKE) $(MAKESILENT) -f vendored/SDL/CMakeFiles/SDL3-shared.dir/build.make vendored/SDL/CMakeFiles/SDL3-shared.dir/cmake_pch_x86_64.h.pch
-.PHONY : cmake_pch_x86_64.h.pch
-
-# target to preprocess a source file
-cmake_pch_x86_64.h.i:
-	cd /Users/taufiq/Documents/chippy/build && $(MAKE) $(MAKESILENT) -f vendored/SDL/CMakeFiles/SDL3-shared.dir/build.make vendored/SDL/CMakeFiles/SDL3-shared.dir/cmake_pch_x86_64.h.i
-.PHONY : cmake_pch_x86_64.h.i
-
-# target to generate assembly for a file
-cmake_pch_x86_64.h.s:
-	cd /Users/taufiq/Documents/chippy/build && $(MAKE) $(MAKESILENT) -f vendored/SDL/CMakeFiles/SDL3-shared.dir/build.make vendored/SDL/CMakeFiles/SDL3-shared.dir/cmake_pch_x86_64.h.s
-.PHONY : cmake_pch_x86_64.h.s
-
 src/SDL.o: src/SDL.c.o
 .PHONY : src/SDL.o
 
@@ -5937,9 +5922,6 @@ help:
 	@echo "... cmake_pch_arm64.h.pch"
 	@echo "... cmake_pch_arm64.h.i"
 	@echo "... cmake_pch_arm64.h.s"
-	@echo "... cmake_pch_x86_64.h.pch"
-	@echo "... cmake_pch_x86_64.h.i"
-	@echo "... cmake_pch_x86_64.h.s"
 	@echo "... src/SDL.o"
 	@echo "... src/SDL.i"
 	@echo "... src/SDL.s"

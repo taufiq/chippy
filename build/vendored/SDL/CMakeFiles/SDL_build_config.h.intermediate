@@ -582,7 +582,7 @@ typedef unsigned int uintptr_t;
 #define SDL_DISABLE_MMX 1
 #define SDL_DISABLE_LSX 1
 #define SDL_DISABLE_LASX 1
-#define SDL_DISABLE_NEON 1
+/* #undef SDL_DISABLE_NEON */
 
 #ifdef SDL_PLATFORM_PRIVATE
 #include "SDL_end_config_private.h"

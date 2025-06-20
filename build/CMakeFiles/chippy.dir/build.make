@@ -83,24 +83,120 @@ CMakeFiles/chippy.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chippy.dir/main.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/taufiq/Documents/chippy/main.cpp -o CMakeFiles/chippy.dir/main.cpp.s
 
+CMakeFiles/chippy.dir/Node.cpp.o: CMakeFiles/chippy.dir/flags.make
+CMakeFiles/chippy.dir/Node.cpp.o: /Users/taufiq/Documents/chippy/Node.cpp
+CMakeFiles/chippy.dir/Node.cpp.o: CMakeFiles/chippy.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/chippy.dir/Node.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chippy.dir/Node.cpp.o -MF CMakeFiles/chippy.dir/Node.cpp.o.d -o CMakeFiles/chippy.dir/Node.cpp.o -c /Users/taufiq/Documents/chippy/Node.cpp
+
+CMakeFiles/chippy.dir/Node.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chippy.dir/Node.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/taufiq/Documents/chippy/Node.cpp > CMakeFiles/chippy.dir/Node.cpp.i
+
+CMakeFiles/chippy.dir/Node.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chippy.dir/Node.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/taufiq/Documents/chippy/Node.cpp -o CMakeFiles/chippy.dir/Node.cpp.s
+
+CMakeFiles/chippy.dir/MainWindow.cpp.o: CMakeFiles/chippy.dir/flags.make
+CMakeFiles/chippy.dir/MainWindow.cpp.o: /Users/taufiq/Documents/chippy/MainWindow.cpp
+CMakeFiles/chippy.dir/MainWindow.cpp.o: CMakeFiles/chippy.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/chippy.dir/MainWindow.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chippy.dir/MainWindow.cpp.o -MF CMakeFiles/chippy.dir/MainWindow.cpp.o.d -o CMakeFiles/chippy.dir/MainWindow.cpp.o -c /Users/taufiq/Documents/chippy/MainWindow.cpp
+
+CMakeFiles/chippy.dir/MainWindow.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chippy.dir/MainWindow.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/taufiq/Documents/chippy/MainWindow.cpp > CMakeFiles/chippy.dir/MainWindow.cpp.i
+
+CMakeFiles/chippy.dir/MainWindow.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chippy.dir/MainWindow.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/taufiq/Documents/chippy/MainWindow.cpp -o CMakeFiles/chippy.dir/MainWindow.cpp.s
+
+CMakeFiles/chippy.dir/Box.cpp.o: CMakeFiles/chippy.dir/flags.make
+CMakeFiles/chippy.dir/Box.cpp.o: /Users/taufiq/Documents/chippy/Box.cpp
+CMakeFiles/chippy.dir/Box.cpp.o: CMakeFiles/chippy.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/chippy.dir/Box.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chippy.dir/Box.cpp.o -MF CMakeFiles/chippy.dir/Box.cpp.o.d -o CMakeFiles/chippy.dir/Box.cpp.o -c /Users/taufiq/Documents/chippy/Box.cpp
+
+CMakeFiles/chippy.dir/Box.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chippy.dir/Box.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/taufiq/Documents/chippy/Box.cpp > CMakeFiles/chippy.dir/Box.cpp.i
+
+CMakeFiles/chippy.dir/Box.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chippy.dir/Box.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/taufiq/Documents/chippy/Box.cpp -o CMakeFiles/chippy.dir/Box.cpp.s
+
+CMakeFiles/chippy.dir/Text.cpp.o: CMakeFiles/chippy.dir/flags.make
+CMakeFiles/chippy.dir/Text.cpp.o: /Users/taufiq/Documents/chippy/Text.cpp
+CMakeFiles/chippy.dir/Text.cpp.o: CMakeFiles/chippy.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/chippy.dir/Text.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chippy.dir/Text.cpp.o -MF CMakeFiles/chippy.dir/Text.cpp.o.d -o CMakeFiles/chippy.dir/Text.cpp.o -c /Users/taufiq/Documents/chippy/Text.cpp
+
+CMakeFiles/chippy.dir/Text.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chippy.dir/Text.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/taufiq/Documents/chippy/Text.cpp > CMakeFiles/chippy.dir/Text.cpp.i
+
+CMakeFiles/chippy.dir/Text.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chippy.dir/Text.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/taufiq/Documents/chippy/Text.cpp -o CMakeFiles/chippy.dir/Text.cpp.s
+
+CMakeFiles/chippy.dir/TextManager.cpp.o: CMakeFiles/chippy.dir/flags.make
+CMakeFiles/chippy.dir/TextManager.cpp.o: /Users/taufiq/Documents/chippy/TextManager.cpp
+CMakeFiles/chippy.dir/TextManager.cpp.o: CMakeFiles/chippy.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/chippy.dir/TextManager.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chippy.dir/TextManager.cpp.o -MF CMakeFiles/chippy.dir/TextManager.cpp.o.d -o CMakeFiles/chippy.dir/TextManager.cpp.o -c /Users/taufiq/Documents/chippy/TextManager.cpp
+
+CMakeFiles/chippy.dir/TextManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chippy.dir/TextManager.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/taufiq/Documents/chippy/TextManager.cpp > CMakeFiles/chippy.dir/TextManager.cpp.i
+
+CMakeFiles/chippy.dir/TextManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chippy.dir/TextManager.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/taufiq/Documents/chippy/TextManager.cpp -o CMakeFiles/chippy.dir/TextManager.cpp.s
+
+CMakeFiles/chippy.dir/Canvas.cpp.o: CMakeFiles/chippy.dir/flags.make
+CMakeFiles/chippy.dir/Canvas.cpp.o: /Users/taufiq/Documents/chippy/Canvas.cpp
+CMakeFiles/chippy.dir/Canvas.cpp.o: CMakeFiles/chippy.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/chippy.dir/Canvas.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/chippy.dir/Canvas.cpp.o -MF CMakeFiles/chippy.dir/Canvas.cpp.o.d -o CMakeFiles/chippy.dir/Canvas.cpp.o -c /Users/taufiq/Documents/chippy/Canvas.cpp
+
+CMakeFiles/chippy.dir/Canvas.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/chippy.dir/Canvas.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/taufiq/Documents/chippy/Canvas.cpp > CMakeFiles/chippy.dir/Canvas.cpp.i
+
+CMakeFiles/chippy.dir/Canvas.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/chippy.dir/Canvas.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/taufiq/Documents/chippy/Canvas.cpp -o CMakeFiles/chippy.dir/Canvas.cpp.s
+
 # Object files for target chippy
 chippy_OBJECTS = \
-"CMakeFiles/chippy.dir/main.cpp.o"
+"CMakeFiles/chippy.dir/main.cpp.o" \
+"CMakeFiles/chippy.dir/Node.cpp.o" \
+"CMakeFiles/chippy.dir/MainWindow.cpp.o" \
+"CMakeFiles/chippy.dir/Box.cpp.o" \
+"CMakeFiles/chippy.dir/Text.cpp.o" \
+"CMakeFiles/chippy.dir/TextManager.cpp.o" \
+"CMakeFiles/chippy.dir/Canvas.cpp.o"
 
 # External object files for target chippy
 chippy_EXTERNAL_OBJECTS =
 
-chippy: CMakeFiles/chippy.dir/main.cpp.o
-chippy: CMakeFiles/chippy.dir/build.make
-chippy: libSDL3_ttf.0.3.0.dylib
-chippy: SDL3.framework/Versions/A/SDL3
-chippy: /Users/taufiq/Documents/chippy/vendored/SDL/src/dynapi/SDL_dynapi.sym
-chippy: CMakeFiles/chippy.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable chippy"
+Debug/chippyd: CMakeFiles/chippy.dir/main.cpp.o
+Debug/chippyd: CMakeFiles/chippy.dir/Node.cpp.o
+Debug/chippyd: CMakeFiles/chippy.dir/MainWindow.cpp.o
+Debug/chippyd: CMakeFiles/chippy.dir/Box.cpp.o
+Debug/chippyd: CMakeFiles/chippy.dir/Text.cpp.o
+Debug/chippyd: CMakeFiles/chippy.dir/TextManager.cpp.o
+Debug/chippyd: CMakeFiles/chippy.dir/Canvas.cpp.o
+Debug/chippyd: CMakeFiles/chippy.dir/build.make
+Debug/chippyd: Debug/libSDL3_ttf.0.3.0.dylib
+Debug/chippyd: Debug/libSDL3.0.dylib
+Debug/chippyd: /Users/taufiq/Documents/chippy/vendored/SDL/src/dynapi/SDL_dynapi.sym
+Debug/chippyd: CMakeFiles/chippy.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable Debug/chippyd"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/chippy.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/chippy.dir/build: chippy
+CMakeFiles/chippy.dir/build: Debug/chippyd
 .PHONY : CMakeFiles/chippy.dir/build
 
 CMakeFiles/chippy.dir/clean:

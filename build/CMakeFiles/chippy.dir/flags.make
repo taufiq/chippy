@@ -4,11 +4,9 @@
 # compile CXX with /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/taufiq/Documents/chippy/build -I/Users/taufiq/Documents/chippy/build/SDL3.framework/Headers -I/Users/taufiq/Documents/chippy/vendored/SDL_ttf/include -I/Users/taufiq/Documents/chippy/build/vendored/SDL/include-revision -I/Users/taufiq/Documents/chippy/vendored/SDL/include -F/Users/taufiq/Documents/chippy/build
+CXX_INCLUDES = -I/Users/taufiq/Documents/chippy/build -I/Users/taufiq/Documents/chippy/vendored/SDL/include -I/Users/taufiq/Documents/chippy/vendored/SDL_ttf/include -I/Users/taufiq/Documents/chippy/build/vendored/SDL/include-revision
 
-CXX_FLAGSarm64 = -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIE
+CXX_FLAGSarm64 = -g -g -O0 -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIE -g -O0
 
-CXX_FLAGSx86_64 = -std=gnu++20 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIE
-
-CXX_FLAGS = -std=gnu++20 -arch arm64 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIE
+CXX_FLAGS = -g -g -O0 -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIE -g -O0
 

@@ -55,11 +55,11 @@ set_target_properties(plutovg::plutovg PROPERTIES
   INTERFACE_LINK_LIBRARIES "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/usr/lib/libm.tbd"
 )
 
-# Import target "plutovg::plutovg" for configuration ""
-set_property(TARGET plutovg::plutovg APPEND PROPERTY IMPORTED_CONFIGURATIONS NOCONFIG)
+# Import target "plutovg::plutovg" for configuration "Debug"
+set_property(TARGET plutovg::plutovg APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(plutovg::plutovg PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_NOCONFIG "C"
-  IMPORTED_LOCATION_NOCONFIG "/Users/taufiq/Documents/chippy/build/vendored/SDL_ttf/external/plutovg-build/libplutovg.a"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "C"
+  IMPORTED_LOCATION_DEBUG "/Users/taufiq/Documents/chippy/build/vendored/SDL_ttf/external/plutovg-build/libplutovg.a"
   )
 
 # This file does not depend on other imported targets which have

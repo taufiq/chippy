@@ -705,56 +705,56 @@ freetype_OBJECTS = \
 # External object files for target freetype
 freetype_EXTERNAL_OBJECTS =
 
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/autofit/autofit.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbase.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbbox.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbdf.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbitmap.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftcid.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftfstype.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftgasp.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftglyph.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftgxval.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftinit.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftmm.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftotval.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftpatent.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftpfr.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftstroke.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftsynth.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/fttype1.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftwinfnt.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/bdf/bdf.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/bzip2/ftbzip2.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/cache/ftcache.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/cff/cff.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/cid/type1cid.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/gzip/ftgzip.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/lzw/ftlzw.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/pcf/pcf.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/pfr/pfr.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/psaux/psaux.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/pshinter/pshinter.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/psnames/psnames.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/raster/raster.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/sdf/sdf.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/sfnt/sfnt.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/smooth/smooth.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/svg/svg.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/truetype/truetype.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/type1/type1.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/type42/type42.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/winfonts/winfnt.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/builds/unix/ftsystem.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftdebug.c.o
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/build.make
-vendored/SDL_ttf/external/freetype-build/libfreetype.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Linking CXX static library libfreetype.a"
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/autofit/autofit.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbase.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbbox.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbdf.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbitmap.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftcid.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftfstype.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftgasp.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftglyph.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftgxval.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftinit.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftmm.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftotval.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftpatent.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftpfr.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftstroke.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftsynth.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/fttype1.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftwinfnt.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/bdf/bdf.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/bzip2/ftbzip2.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/cache/ftcache.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/cff/cff.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/cid/type1cid.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/gzip/ftgzip.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/lzw/ftlzw.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/pcf/pcf.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/pfr/pfr.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/psaux/psaux.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/pshinter/pshinter.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/psnames/psnames.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/raster/raster.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/sdf/sdf.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/sfnt/sfnt.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/smooth/smooth.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/svg/svg.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/truetype/truetype.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/type1/type1.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/type42/type42.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/winfonts/winfnt.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/builds/unix/ftsystem.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftdebug.c.o
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/build.make
+vendored/SDL_ttf/external/freetype-build/libfreetyped.a: vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/taufiq/Documents/chippy/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Linking CXX static library libfreetyped.a"
 	cd /Users/taufiq/Documents/chippy/build/vendored/SDL_ttf/external/freetype-build && $(CMAKE_COMMAND) -P CMakeFiles/freetype.dir/cmake_clean_target.cmake
 	cd /Users/taufiq/Documents/chippy/build/vendored/SDL_ttf/external/freetype-build && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/freetype.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/build: vendored/SDL_ttf/external/freetype-build/libfreetype.a
+vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/build: vendored/SDL_ttf/external/freetype-build/libfreetyped.a
 .PHONY : vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/build
 
 vendored/SDL_ttf/external/freetype-build/CMakeFiles/freetype.dir/clean:

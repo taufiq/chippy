@@ -26,7 +26,7 @@ endmacro()
 ####################################################################################
 
 set(SDL3_FOUND TRUE)
-set(_sdl3_framework ON)
+set(_sdl3_framework OFF)
 
 # Find SDL3::Headers
 if(NOT TARGET SDL3::Headers)

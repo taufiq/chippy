@@ -6,9 +6,7 @@ CXX_DEFINES = -DHAVE_ATEXIT -DHAVE_CORETEXT -DHAVE_FREETYPE=1 -DHAVE_FT_DONE_MM_
 
 CXX_INCLUDES = -I/Users/taufiq/Documents/chippy/vendored/SDL_ttf/external/harfbuzz/src -I/Users/taufiq/Documents/chippy/build/vendored/SDL_ttf/external/harfbuzz-build/src -I/Users/taufiq/Documents/chippy/build/vendored/SDL_ttf/external/freetype-build/include -I/Users/taufiq/Documents/chippy/vendored/SDL_ttf/external/freetype/include -F/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks
 
-CXX_FLAGSarm64 =  -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++11 -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC
+CXX_FLAGSarm64 =  -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++11 -g -g -O0 -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC
 
-CXX_FLAGSx86_64 =  -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++11 -std=gnu++20 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC
-
-CXX_FLAGS =  -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++11 -std=gnu++20 -arch arm64 -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC
+CXX_FLAGS =  -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++11 -g -g -O0 -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -fPIC
 

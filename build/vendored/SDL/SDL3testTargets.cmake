@@ -48,7 +48,6 @@ unset(_cmake_expected_targets)
 
 # Create imported target SDL3::SDL3_test
 add_library(SDL3::SDL3_test STATIC IMPORTED)
-set_property(TARGET SDL3::SDL3_test PROPERTY FRAMEWORK 1)
 
 set_target_properties(SDL3::SDL3_test PROPERTIES
   COMPATIBLE_INTERFACE_STRING "SDL_VERSION"
@@ -56,11 +55,11 @@ set_target_properties(SDL3::SDL3_test PROPERTIES
   INTERFACE_SDL_VERSION "SDL3"
 )
 
-# Import target "SDL3::SDL3_test" for configuration ""
-set_property(TARGET SDL3::SDL3_test APPEND PROPERTY IMPORTED_CONFIGURATIONS NOCONFIG)
+# Import target "SDL3::SDL3_test" for configuration "Debug"
+set_property(TARGET SDL3::SDL3_test APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
 set_target_properties(SDL3::SDL3_test PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_NOCONFIG "C"
-  IMPORTED_LOCATION_NOCONFIG "/Users/taufiq/Documents/chippy/build/vendored/SDL/SDL3_test.framework/Versions/A/SDL3_test"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "C"
+  IMPORTED_LOCATION_DEBUG "/Users/taufiq/Documents/chippy/build/vendored/SDL/libSDL3_test.a"
   )
 
 # Make sure the targets which have been exported in some other
