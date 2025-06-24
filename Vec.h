@@ -21,6 +21,8 @@ struct Vec3f
 struct Vec2f
 {
     float x{}, y{};
+    float w() { return x; }
+    float h() { return y; }
 };
 struct Vec2
 {
