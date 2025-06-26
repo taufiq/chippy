@@ -93,11 +93,18 @@ namespace GUI
 
         TTF_GetStringSizeWrapped(mgr.font, text, 0, 0, &w, &h);
 
-        SDL_FRect rectangle{cursorPosition.x, cursorPosition.y, static_cast<float>(w), static_cast<float>(h)};
+        SDL_FRect rectangle{cursorPosition.x, cursorPosition.y + mgr.offsets[parentCtx.id].y, static_cast<float>(w), static_cast<float>(h)};
 
-        SDL_SetRenderDrawColor(mgr.renderer, 255, 0, 255, 255);
-        SDL_RenderRect(mgr.renderer, &rectangle);
-        TTF_DrawRendererText(TTF_CreateText(mgr.textEngine, mgr.font, text, 0), rectangle.x, rectangle.y);
+        if (RectContainsChildRect(
+                parentCtx.position,
+                parentCtx.size,
+                (Vec2f){.x = rectangle.x, .y = rectangle.y},
+                (Vec2f){.x = rectangle.x, .y = static_cast<float>(rectangle.h)}))
+        {
+            SDL_SetRenderDrawColor(mgr.renderer, 255, 0, 255, 255);
+            SDL_RenderRect(mgr.renderer, &rectangle);
+            TTF_DrawRendererText(TTF_CreateText(mgr.textEngine, mgr.font, text, 0), rectangle.x, rectangle.y);
+        }
 
         AdvanceCursor((Vec2f){.x = static_cast<float>(w), .y = static_cast<float>(h)});
     }
@@ -181,6 +188,13 @@ namespace GUI
         return false;
     }
 
+    /** This is cheat code, I'm merely checking y-coordinates only */
+    bool RectContainsChildRect(Vec2f parentPosition, Vec2f parentSize, Vec2f childPosition, Vec2f childSize)
+    {
+        return IsInBounds(parentPosition, parentSize, childPosition) ||
+               IsInBounds(parentPosition, parentSize, (Vec2f){.x = childPosition.x, .y = childPosition.y + childSize.y});
+    }
+
     void Text(const char *text);
     void Canvas();
     void BeginBox(Axis axis, float percentage)
@@ -192,6 +206,8 @@ namespace GUI
         PushContext();
         SetAxis(axis);
         WindowContext &childCtx = GetContext();
+
+        childCtx.id = id;
 
         if (parentCtx.axis == Axis::Horizontal)
         {
@@ -207,10 +223,8 @@ namespace GUI
         if (IsInBounds(childCtx.position, childCtx.size, mgr.mousePosition))
         {
             mgr.activeId = id;
-            // TODO: add better way to track scroll
             mgr.offsets[id].y += mgr.scrollDelta.y;
         }
-        childCtx.position.y += mgr.offsets[id].y;
 
         SDL_SetRenderDrawColor(mgr.renderer, 0, 0, 0, 255);
         SDL_FRect rect{childCtx.position.x, childCtx.position.y, childCtx.size.x, childCtx.size.y};

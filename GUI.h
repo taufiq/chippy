@@ -21,6 +21,7 @@ namespace GUI
         Vec2f size{};
         Vec2f cursor{};
         Axis axis{Axis::Horizontal};
+        uint id{};
         bool scrollable{false};
     } WindowContext;
 
@@ -71,6 +72,7 @@ namespace GUI
     Vec4f GetAvailableSpace(WindowContext &parentCtx, WindowContext &childCtx);
     SDL_FRect Vec4fToFRect(Vec4f vec);
     bool IsInBounds(Vec2f position, Vec2f size, Vec2f cursor);
+    bool RectContainsChildRect(Vec2f parentPosition, Vec2f parentSize, Vec2f childPosition, Vec2f childSize);
 
     void Button(const char *text);
     void Text(const char *text);
