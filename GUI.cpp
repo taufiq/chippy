@@ -1,5 +1,7 @@
 #include "GUI.h"
 #include <SDL3_ttf/SDL_ttf.h>
+#include <string>
+
 namespace GUI
 {
     void InitAll(SDL_Renderer *renderer, TTF_TextEngine *textEngine)
@@ -9,6 +11,7 @@ namespace GUI
         mgr.textEngine = textEngine;
         mgr.font = TTF_OpenFont("fonts/font.ttf", 20);
         mgr.stack = new WindowContext[CONTEXT_STACK_SIZE];
+        mgr.offsets = new Vec2f[20];
     }
 
     void Start(int width, int height)
@@ -31,6 +34,11 @@ namespace GUI
         WindowManager &mgr = GetManager();
         mgr.stackIndex = 0;
         memset(mgr.stack, 0, CONTEXT_STACK_SIZE * sizeof(*mgr.stack));
+
+        mgr.scrollDelta.y /= 1.1f;
+        mgr.scrollDelta.x /= 1.1f;
+
+        GenId() = 0;
     }
 
     WindowManager &GetManager()
@@ -97,7 +105,6 @@ namespace GUI
     void AdvanceCursor(Vec2f dimensions)
     {
         WindowContext &ctx = GetContext();
-        SDL_Log("X: %f, Y: %f", dimensions.x, dimensions.y);
         if (ctx.axis == Axis::Horizontal)
         {
             ctx.cursor.x += dimensions.x;
@@ -108,10 +115,79 @@ namespace GUI
         }
     }
 
+    void SetMousePosition(Vec2f coordinates)
+    {
+        GetManager().mousePosition = coordinates;
+    }
+
+    void SetScrollDelta(Vec2f delta)
+    {
+        WindowManager &mgr = GetManager();
+        mgr.scrollDelta.x += delta.x;
+        mgr.scrollDelta.y += delta.y;
+    }
+
+    uint &GenId()
+    {
+        static uint id{};
+        id += 1;
+        return id;
+    }
+
+    uint &ResetId()
+    {
+        // uint &id = GenId();
+        // id = 0;
+    }
+
+    Vec4f GetAvailableSpace(WindowContext &parentCtx, WindowContext &childCtx)
+    {
+        Axis direction = parentCtx.axis;
+        Vec4f rectangle{};
+        switch (direction)
+        {
+        case Axis::Vertical:
+            rectangle.x = childCtx.position.x;
+            rectangle.y = childCtx.position.y + childCtx.size.y;
+            rectangle.z = parentCtx.position.y + parentCtx.size.y - rectangle.y;
+            rectangle.w = childCtx.size.w();
+            break;
+        case Axis::Horizontal:
+            rectangle.x = childCtx.position.x + childCtx.size.x;
+            rectangle.y = childCtx.position.y;
+            rectangle.z = parentCtx.position.x + parentCtx.size.x - rectangle.x;
+            rectangle.w = childCtx.size.h();
+            break;
+        default:
+            break;
+        }
+        return rectangle;
+    }
+
+    /// @brief Converts our Vec4f to FRec
+    /// @param vec
+    /// @return SDL_FRect for SDL
+    SDL_FRect Vec4fToFRect(Vec4f vec)
+    {
+        return SDL_FRect{vec.x, vec.y, vec.z, vec.w};
+    }
+
+    bool IsInBounds(Vec2f position, Vec2f size, Vec2f cursor)
+    {
+        if (cursor.x >= position.x && cursor.x <= position.x + size.x && cursor.y >= position.y && cursor.y <= position.y + size.y)
+        {
+            return true;
+        }
+        return false;
+    }
+
     void Text(const char *text);
     void Canvas();
     void BeginBox(Axis axis, float percentage)
     {
+        uint id = GenId();
+
+        WindowManager &mgr = GetManager();
         WindowContext &parentCtx = GetContext();
         PushContext();
         SetAxis(axis);
@@ -127,11 +203,23 @@ namespace GUI
             childCtx.size.x = parentCtx.size.x;
             childCtx.size.y = parentCtx.size.h() * percentage;
         }
+
+        if (IsInBounds(childCtx.position, childCtx.size, mgr.mousePosition))
+        {
+            mgr.activeId = id;
+            // TODO: add better way to track scroll
+            mgr.offsets[id].y += mgr.scrollDelta.y;
+        }
+        childCtx.position.y += mgr.offsets[id].y;
+
+        SDL_SetRenderDrawColor(mgr.renderer, 0, 0, 0, 255);
+        SDL_FRect rect{childCtx.position.x, childCtx.position.y, childCtx.size.x, childCtx.size.y};
+        SDL_RenderFillRect(mgr.renderer, &rect);
+        TTF_DrawRendererText(TTF_CreateText(mgr.textEngine, mgr.font, std::to_string(id).c_str(), 0), childCtx.position.x + 10, childCtx.position.y + 10);
     }
 
     void BeginBox(float percentage) { BeginBox(Axis::Horizontal, percentage); };
 
-    // TODO: Figure out how to clip shit
     void EndBox()
     {
         WindowManager &mgr = GetManager();
@@ -139,23 +227,12 @@ namespace GUI
         PopContext();
         WindowContext &parentCtx = GetContext();
 
-        float widthDiff = parentCtx.size.x - childCtx.size.x;
-        float heightDiff = parentCtx.size.y - childCtx.size.y;
-        SDL_FRect rect{
-            childCtx.position.x + childCtx.size.x,
-            0,
-            parentCtx.position.x + parentCtx.size.x - childCtx.position.x - childCtx.size.x,
-            parentCtx.position.y + parentCtx.size.y - childCtx.position.y - childCtx.size.y,
-        };
-        if (widthDiff == 0)
-        {
-            rect.w = parentCtx.size.w();
-        }
-        else
-        {
-            rect.h = parentCtx.size.h();
-        }
-        SDL_SetRenderDrawColor(mgr.renderer, 0, 0, 0, 255);
+        SDL_SetRenderDrawColor(mgr.renderer, 255, 0, 0, 255);
+
+        Vec4f availableRectangle{GetAvailableSpace(parentCtx, childCtx)};
+
+        SDL_FRect rect{availableRectangle.x, availableRectangle.y, availableRectangle.z, availableRectangle.w};
+
         SDL_RenderFillRect(mgr.renderer, &rect);
 
         AdvanceCursor(childCtx.size);
@@ -165,6 +242,11 @@ namespace GUI
     {
         WindowContext &ctx = GetContext();
         ctx.axis = axis;
+    }
+    void MakeScrollable()
+    {
+        WindowContext &ctx = GetContext();
+        ctx.scrollable = true;
     }
 }
 /**

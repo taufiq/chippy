@@ -45,8 +45,15 @@ int main()
                 gRunning = false;
                 continue;
             case SDL_EventType::SDL_EVENT_MOUSE_MOTION:
+                GUI::SetMousePosition((Vec2f){
+                    .x = pollEvent.motion.x,
+                    .y = pollEvent.motion.y});
                 continue;
             case SDL_EventType::SDL_EVENT_MOUSE_WHEEL:
+                GUI::SetScrollDelta((Vec2f){
+                    .x = 0.0f,
+                    .y = pollEvent.wheel.y,
+                });
                 continue;
             default:
                 continue;
@@ -58,25 +65,26 @@ int main()
         SDL_RenderClear(renderer);
         GUI::Start(w, h);
         GUI::BeginBox(GUI::Axis::Vertical, 0.5);
-            GUI::BeginBox(GUI::Axis::Vertical, 0.5);
-            for (int i = 0; i < 20; i++) {
-                GUI::Button("Hello");
-            }
-            GUI::EndBox();
+        GUI::BeginBox(GUI::Axis::Horizontal, 0.2);
+        for (int i = 0; i < 50; i++)
+        {
+            GUI::Button("Hello");
+        }
+        GUI::EndBox();
 
-            GUI::BeginBox(0.1);
-            GUI::Button("World");
-            GUI::EndBox();
+        GUI::BeginBox(0.8);
+        GUI::Button("World");
+        GUI::EndBox();
         GUI::EndBox();
 
         GUI::BeginBox(GUI::Axis::Vertical, 0.5);
-            GUI::BeginBox(0.5);
-            GUI::Button("Goodbye");
-            GUI::EndBox();
+        GUI::BeginBox(0.5);
+        GUI::Button("Goodbye");
+        GUI::EndBox();
 
-            GUI::BeginBox(0.5);
-            GUI::Button("Bro");
-            GUI::EndBox();
+        GUI::BeginBox(0.5);
+        GUI::Button("Bro");
+        GUI::EndBox();
         GUI::EndBox();
 
         GUI::End();

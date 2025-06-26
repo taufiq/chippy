@@ -21,6 +21,7 @@ namespace GUI
         Vec2f size{};
         Vec2f cursor{};
         Axis axis{Axis::Horizontal};
+        bool scrollable{false};
     } WindowContext;
 
     typedef struct Button
@@ -36,11 +37,17 @@ namespace GUI
         WindowContext *stack{nullptr};
         uint16_t stackIndex{0};
 
-        SDL_Renderer *renderer;
-        TTF_TextEngine *textEngine;
-        TTF_Font *font;
-        std::vector<UIButton> buttons;
-        std::vector<UIText> texts;
+        SDL_Renderer *renderer{nullptr};
+        TTF_TextEngine *textEngine{nullptr};
+        TTF_Font *font{nullptr};
+
+        [[maybe_unused]] std::vector<UIButton> buttons;
+        [[maybe_unused]] std::vector<UIText> texts;
+
+        Vec2f mousePosition{};
+        Vec2f scrollDelta{};
+        Vec2f *offsets{nullptr};
+        uint activeId{0};
     } WindowManager;
 
     void InitAll(SDL_Renderer *renderer, TTF_TextEngine *textEngine);
@@ -54,7 +61,16 @@ namespace GUI
     void PushContext();
     void PopContext();
     void AdvanceCursor(Vec2f dimensions);
+    void SetMousePosition(Vec2f coordinates);
+    void SetScrollDelta(Vec2f delta);
+
+    uint &GenId();
+    uint &ResetId();
+
     Vec2f GetAbsolutePosition(WindowContext &ctx);
+    Vec4f GetAvailableSpace(WindowContext &parentCtx, WindowContext &childCtx);
+    SDL_FRect Vec4fToFRect(Vec4f vec);
+    bool IsInBounds(Vec2f position, Vec2f size, Vec2f cursor);
 
     void Button(const char *text);
     void Text(const char *text);
@@ -63,4 +79,5 @@ namespace GUI
     void BeginBox(float percentage);
     void EndBox();
     void SetAxis(Axis axis);
+    void MakeScrollable();
 }
