@@ -226,9 +226,13 @@ namespace GUI
             mgr.offsets[id].y += mgr.scrollDelta.y;
         }
 
+        SDL_FRect fRect{childCtx.position.x, childCtx.position.y, childCtx.size.x, childCtx.size.y};
+        SDL_Rect rect(fRect.x, fRect.y, fRect.w, fRect.h);
+
         SDL_SetRenderDrawColor(mgr.renderer, 0, 0, 0, 255);
-        SDL_FRect rect{childCtx.position.x, childCtx.position.y, childCtx.size.x, childCtx.size.y};
-        SDL_RenderFillRect(mgr.renderer, &rect);
+        SDL_SetRenderClipRect(mgr.renderer, &rect);
+        SDL_RenderFillRect(mgr.renderer, &fRect);
+
         TTF_DrawRendererText(TTF_CreateText(mgr.textEngine, mgr.font, std::to_string(id).c_str(), 0), childCtx.position.x + 10, childCtx.position.y + 10);
     }
 
@@ -240,14 +244,6 @@ namespace GUI
         WindowContext &childCtx = GetContext();
         PopContext();
         WindowContext &parentCtx = GetContext();
-
-        SDL_SetRenderDrawColor(mgr.renderer, 255, 0, 0, 255);
-
-        Vec4f availableRectangle{GetAvailableSpace(parentCtx, childCtx)};
-
-        SDL_FRect rect{availableRectangle.x, availableRectangle.y, availableRectangle.z, availableRectangle.w};
-
-        SDL_RenderFillRect(mgr.renderer, &rect);
 
         AdvanceCursor(childCtx.size);
     }
