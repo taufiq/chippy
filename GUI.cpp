@@ -1,0 +1,269 @@
+#include "GUI.h"
+#include <SDL3_ttf/SDL_ttf.h>
+#include <string>
+
+namespace GUI
+{
+    void InitAll(SDL_Renderer *renderer, TTF_TextEngine *textEngine)
+    {
+        WindowManager &mgr = GetManager();
+        mgr.renderer = renderer;
+        mgr.textEngine = textEngine;
+        mgr.font = TTF_OpenFont("fonts/font.ttf", 20);
+        mgr.stack = new WindowContext[CONTEXT_STACK_SIZE];
+        mgr.offsets = new Vec2f[20];
+    }
+
+    void Start(int width, int height)
+    {
+        WindowManager &mgr = GetManager();
+        WindowContext &ctx = GetContext();
+
+        ctx.size.x = static_cast<float>(width);
+        ctx.size.y = static_cast<float>(height);
+
+        ctx.cursor.x = 0;
+        ctx.cursor.y = 0;
+
+        ctx.position.x = 0;
+        ctx.position.y = 0;
+    }
+
+    void End()
+    {
+        WindowManager &mgr = GetManager();
+        mgr.stackIndex = 0;
+        memset(mgr.stack, 0, CONTEXT_STACK_SIZE * sizeof(*mgr.stack));
+
+        mgr.scrollDelta.y /= 1.1f;
+        mgr.scrollDelta.x /= 1.1f;
+
+        GenId() = 0;
+    }
+
+    WindowManager &GetManager()
+    {
+        static WindowManager mgr{};
+        return mgr;
+    }
+    WindowContext &GetContext()
+    {
+        WindowManager &mgr = GetManager();
+        return mgr.stack[mgr.stackIndex];
+    }
+
+    void PushContext()
+    {
+        WindowManager &mgr = GetManager();
+        mgr.stackIndex++;
+        mgr.stack[mgr.stackIndex].position = mgr.stack[mgr.stackIndex - 1].position;
+        mgr.stack[mgr.stackIndex].position.x += mgr.stack[mgr.stackIndex - 1].cursor.x;
+        mgr.stack[mgr.stackIndex].position.y += mgr.stack[mgr.stackIndex - 1].cursor.y;
+
+        mgr.stack[mgr.stackIndex].cursor = Vec2f{};
+        mgr.stack[mgr.stackIndex].size = Vec2f{};
+        mgr.stack[mgr.stackIndex].axis = Axis::Horizontal;
+    }
+
+    void PopContext()
+    {
+        WindowManager &mgr = GetManager();
+        if (mgr.stackIndex == 0)
+        {
+            return;
+        }
+        mgr.stackIndex--;
+    }
+
+    Vec2f GetAbsoluteCursorPosition(WindowContext &ctx)
+    {
+        return (Vec2f){
+            .x = ctx.position.x + ctx.cursor.x,
+            .y = ctx.position.y + ctx.cursor.y,
+        };
+    }
+
+    void Button(const char *text)
+    {
+        int w, h;
+        WindowManager &mgr = GetManager();
+        WindowContext &parentCtx = GetContext();
+
+        Vec2f cursorPosition = GetAbsoluteCursorPosition(parentCtx);
+
+        TTF_GetStringSizeWrapped(mgr.font, text, 0, 0, &w, &h);
+
+        SDL_FRect rectangle{cursorPosition.x, cursorPosition.y + mgr.offsets[parentCtx.id].y, static_cast<float>(w), static_cast<float>(h)};
+
+        if (RectContainsChildRect(
+                parentCtx.position,
+                parentCtx.size,
+                (Vec2f){.x = rectangle.x, .y = rectangle.y},
+                (Vec2f){.x = rectangle.x, .y = static_cast<float>(rectangle.h)}))
+        {
+            SDL_SetRenderDrawColor(mgr.renderer, 255, 0, 255, 255);
+            SDL_RenderRect(mgr.renderer, &rectangle);
+            TTF_DrawRendererText(TTF_CreateText(mgr.textEngine, mgr.font, text, 0), rectangle.x, rectangle.y);
+        }
+
+        AdvanceCursor((Vec2f){.x = static_cast<float>(w), .y = static_cast<float>(h)});
+    }
+
+    void AdvanceCursor(Vec2f dimensions)
+    {
+        WindowContext &ctx = GetContext();
+        if (ctx.axis == Axis::Horizontal)
+        {
+            ctx.cursor.x += dimensions.x;
+        }
+        else
+        {
+            ctx.cursor.y += dimensions.y;
+        }
+    }
+
+    void SetMousePosition(Vec2f coordinates)
+    {
+        GetManager().mousePosition = coordinates;
+    }
+
+    void SetScrollDelta(Vec2f delta)
+    {
+        WindowManager &mgr = GetManager();
+        mgr.scrollDelta.x += delta.x;
+        mgr.scrollDelta.y += delta.y;
+    }
+
+    uint &GenId()
+    {
+        static uint id{};
+        id += 1;
+        return id;
+    }
+
+    uint &ResetId()
+    {
+        // uint &id = GenId();
+        // id = 0;
+    }
+
+    Vec4f GetAvailableSpace(WindowContext &parentCtx, WindowContext &childCtx)
+    {
+        Axis direction = parentCtx.axis;
+        Vec4f rectangle{};
+        switch (direction)
+        {
+        case Axis::Vertical:
+            rectangle.x = childCtx.position.x;
+            rectangle.y = childCtx.position.y + childCtx.size.y;
+            rectangle.z = parentCtx.position.y + parentCtx.size.y - rectangle.y;
+            rectangle.w = childCtx.size.w();
+            break;
+        case Axis::Horizontal:
+            rectangle.x = childCtx.position.x + childCtx.size.x;
+            rectangle.y = childCtx.position.y;
+            rectangle.z = parentCtx.position.x + parentCtx.size.x - rectangle.x;
+            rectangle.w = childCtx.size.h();
+            break;
+        default:
+            break;
+        }
+        return rectangle;
+    }
+
+    /// @brief Converts our Vec4f to FRec
+    /// @param vec
+    /// @return SDL_FRect for SDL
+    SDL_FRect Vec4fToFRect(Vec4f vec)
+    {
+        return SDL_FRect{vec.x, vec.y, vec.z, vec.w};
+    }
+
+    bool IsInBounds(Vec2f position, Vec2f size, Vec2f cursor)
+    {
+        if (cursor.x >= position.x && cursor.x <= position.x + size.x && cursor.y >= position.y && cursor.y <= position.y + size.y)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /** This is cheat code, I'm merely checking y-coordinates only */
+    bool RectContainsChildRect(Vec2f parentPosition, Vec2f parentSize, Vec2f childPosition, Vec2f childSize)
+    {
+        return IsInBounds(parentPosition, parentSize, childPosition) ||
+               IsInBounds(parentPosition, parentSize, (Vec2f){.x = childPosition.x, .y = childPosition.y + childSize.y});
+    }
+
+    void Text(const char *text);
+    void Canvas();
+    void BeginBox(Axis axis, float percentage)
+    {
+        uint id = GenId();
+
+        WindowManager &mgr = GetManager();
+        WindowContext &parentCtx = GetContext();
+        PushContext();
+        SetAxis(axis);
+        WindowContext &childCtx = GetContext();
+
+        childCtx.id = id;
+
+        if (parentCtx.axis == Axis::Horizontal)
+        {
+            childCtx.size.x = parentCtx.size.w() * percentage;
+            childCtx.size.y = parentCtx.size.y;
+        }
+        else
+        {
+            childCtx.size.x = parentCtx.size.x;
+            childCtx.size.y = parentCtx.size.h() * percentage;
+        }
+
+        if (IsInBounds(childCtx.position, childCtx.size, mgr.mousePosition))
+        {
+            mgr.activeId = id;
+            mgr.offsets[id].y += mgr.scrollDelta.y;
+        }
+
+        SDL_FRect fRect{childCtx.position.x, childCtx.position.y, childCtx.size.x, childCtx.size.y};
+        SDL_Rect rect(fRect.x, fRect.y, fRect.w, fRect.h);
+
+        SDL_SetRenderDrawColor(mgr.renderer, 0, 0, 0, 255);
+        SDL_SetRenderClipRect(mgr.renderer, &rect);
+        SDL_RenderFillRect(mgr.renderer, &fRect);
+
+        TTF_DrawRendererText(TTF_CreateText(mgr.textEngine, mgr.font, std::to_string(id).c_str(), 0), childCtx.position.x + 10, childCtx.position.y + 10);
+    }
+
+    void BeginBox(float percentage) { BeginBox(Axis::Horizontal, percentage); };
+
+    void EndBox()
+    {
+        WindowManager &mgr = GetManager();
+        WindowContext &childCtx = GetContext();
+        PopContext();
+        WindowContext &parentCtx = GetContext();
+
+        AdvanceCursor(childCtx.size);
+    }
+
+    void SetAxis(Axis axis)
+    {
+        WindowContext &ctx = GetContext();
+        ctx.axis = axis;
+    }
+    void MakeScrollable()
+    {
+        WindowContext &ctx = GetContext();
+        ctx.scrollable = true;
+    }
+}
+/**
+ * GUI::Start();
+ * GUI::Text("Hello");
+ * GUI::BeginBox();
+ *  GUI::Text("Alice");
+ *  GUI::Text("Bob");
+ * GUI::End();
+ */
